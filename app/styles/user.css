@@ -1,0 +1,60 @@
+
+/* nav */
+h1{
+    text-align: center;
+}
+main nav{
+    background-color: #333;
+    color: white;
+    padding: 1em 0;
+}
+main nav ul{
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    gap: 1em;
+}
+main nav ul li{
+    flex: 0 0 10vw;
+    text-align: center;
+}
+main nav ul li a{
+    color: white;
+    text-decoration: none;
+}
+
+/* info */
+main article{
+    padding: 1em;
+}
+article h2{
+    text-align: center;
+    color: #333;
+}
+article > p{
+    text-align: center;
+    color: #333;
+}
+article img{
+    display: block;
+    margin: 0 auto;
+    width: 50%;
+}
+article > div{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1em;
+    margin: 5vh 20vw;
+    background-color: blue;
+    padding: 2em;
+}
+div h3{
+    color: white;
+    flex: 0 0 100%;
+}
+div p, h4{
+    color: white;
+    flex: 0 0 100%;
+}
