@@ -41,6 +41,11 @@ class Portfolio extends DBAbstractModel
         $this->parametros['usuarios_id'] = $data['usuarioId'];
         $this->get_results_from_query();
 
+        // guaradar categoria-skill
+        $this->query = "INSERT INTO categorias_skills(categoria) VALUES(:categoria)";
+        $this->parametros['categoria'] = $data['categoria'];
+        $this->get_results_from_query();
+
         // Guardar skills
         $this->query = "INSERT INTO skills(habilidades, visible, created_at, updated_at, categorias_skills_categoria, usuarios_id) VALUES(:habilidades, :visible, :created_at, :updated_at, :categorias_skills_categoria, :usuarios_id)";
         $this->parametros['habilidades'] = $data['habilidades'];
@@ -185,8 +190,6 @@ class Portfolio extends DBAbstractModel
 
     public function mostrarTrabajo($id)
     {
-        $idTrabajo = explode("/", $id);
-        $id = $idTrabajo[2];
         $this->query = "UPDATE trabajos SET visible = 1 WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
@@ -194,16 +197,12 @@ class Portfolio extends DBAbstractModel
 
     public function ocultarTrabajo($id)
     {
-        $idTrabajo = explode("/", $id);
-        $id = $idTrabajo[2];
         $this->query = "UPDATE trabajos SET visible = 0 WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query(); 
     }
     public function mostrarProyecto($id)
     {
-        $idTrabajo = explode("/", $id);
-        $id = $idTrabajo[2];
         $this->query = "UPDATE proyectos SET visible = 1 WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
@@ -211,16 +210,12 @@ class Portfolio extends DBAbstractModel
 
     public function ocultarProyecto($id)
     {
-        $idProyecto = explode("/", $id);
-        $id = $idProyecto[2];
         $this->query = "UPDATE proyectos SET visible = 0 WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();  
     }
     public function mostrarSkill($id)
     {
-        $idSkill = explode("/", $id);
-        $id = $idSkill[2];
         $this->query = "UPDATE skills SET visible = 1 WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
@@ -228,8 +223,6 @@ class Portfolio extends DBAbstractModel
 
     public function ocultarSkill($id)
     {
-        $idSkill = explode("/", $id);
-        $id = $idSkill[2];
         $this->query = "UPDATE skills SET visible = 0 WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();   

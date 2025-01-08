@@ -22,7 +22,7 @@ class PortfolioController extends BaseController
         $portfolio = $portfolioModel->getPortfolio($usuarioId);
 
         $data = [
-            'portfolioExists' => !empty($portfolio['proyectos']),
+            'portfolioExists' => !empty($portfolio['redes_sociales']),
             'trabajos' => $portfolio['trabajos'],
             'proyectos' => $portfolio['proyectos'],
             'skills' => $portfolio['skills'],
@@ -313,12 +313,14 @@ class PortfolioController extends BaseController
         exit();
     }
     // Trabajos
-    public function mostrarTrabajo($id)
+    public function mostrarTrabajo()
     {
         if (!isset($_SESSION['usuario'])) {
             header('Location: view_login.php');
             exit();
         }
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
 
         $portfolioModel = Portfolio::getInstancia();
         $portfolioModel->mostrarTrabajo($id);
@@ -327,13 +329,14 @@ class PortfolioController extends BaseController
         header('Location: ../editar');
     }
 
-    public function ocultarTrabajo($id)
+    public function ocultarTrabajo()
     {
         if (!isset($_SESSION['usuario'])) {
             header('Location: view_login.php');
             exit();
         }
-
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
         $portfolioModel = Portfolio::getInstancia();
         $portfolioModel->ocultarTrabajo($id);
 
@@ -341,12 +344,14 @@ class PortfolioController extends BaseController
         header('Location: ../editar');
     }
     // Proyectos
-    public function mostrarProyecto($id)
+    public function mostrarProyecto()
     {
         if (!isset($_SESSION['usuario'])) {
             header('Location: view_login.php');
             exit();
         }
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
 
         $portfolioModel = Portfolio::getInstancia();
         $portfolioModel->mostrarProyecto($id);
@@ -355,12 +360,14 @@ class PortfolioController extends BaseController
         header('Location: ../editar');
     }
 
-    public function ocultarProyecto($id)
+    public function ocultarProyecto()
     {
         if (!isset($_SESSION['usuario'])) {
             header('Location: view_login.php');
             exit();
         }
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
 
         $portfolioModel = Portfolio::getInstancia();
         $portfolioModel->ocultarProyecto($id);
@@ -369,12 +376,14 @@ class PortfolioController extends BaseController
         header('Location: ../editar');
     }
     // Skills
-    public function mostrarSkill($id)
+    public function mostrarSkill()
     {
         if (!isset($_SESSION['usuario'])) {
             header('Location: view_login.php');
             exit();
         }
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
 
         $portfolioModel = Portfolio::getInstancia();
         $portfolioModel->mostrarSkill($id);
@@ -382,12 +391,15 @@ class PortfolioController extends BaseController
         $_SESSION['mensaje'] = "Skill mostrado con éxito.";
         header('Location: ../editar');
     }
-    public function ocultarSkill($id)
+    public function ocultarSkill()
     {
         if (!isset($_SESSION['usuario'])) {
             header('Location: view_login.php');
             exit();
         }
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
+
         $portfolioModel = Portfolio::getInstancia();
         $portfolioModel->ocultarSkill($id);
         $_SESSION['mensaje'] = "Skill ocultado con éxito.";
