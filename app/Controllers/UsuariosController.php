@@ -137,8 +137,8 @@ class UsuariosController extends BaseController
                     $mail->isSMTP();
                     $mail->Host = 'smtp.gmail.com'; // Cambia esto por tu servidor SMTP
                     $mail->SMTPAuth = true;
-                    $mail->Username = 'javierrumo2@gmail.com'; // Cambia esto por tu correo SMTP
-                    $mail->Password = 'pdwk kmmh thcl tufu'; // Cambia esto por tu contraseña SMTP
+                    $mail->Username = $_ENV["CORREO"]; // Cambia esto por tu correo SMTP
+                    $mail->Password = $_ENV["PASS"]; // Cambia esto por tu contraseña SMTP
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
                     $mail->Port = 587;
 
