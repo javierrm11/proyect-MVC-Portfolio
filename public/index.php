@@ -92,9 +92,16 @@ $router->add([
     'path' => '/^\/activar$/',
     'action' => [UsuariosController::class, 'activar']
 ]);
+$router->add([
+    'name' => 'buscar',
+    'path' => '/^\/buscar$/',
+    'action' => [UsuariosController::class, 'buscar']
+]);
+// Obtenemos la ruta de la petición
 $request = $_SERVER['REQUEST_URI'];
 $route = $router->match($request); // Comprobamos que coincide una ruta
 
+// Si coincide una ruta, creamos una instancia del controlador y llamamos al método
 if ($route) {
     $controllerName = $route['action'][0];
     $actionName = $route['action'][1];

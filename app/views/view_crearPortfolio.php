@@ -9,57 +9,29 @@ $data['portfolioExists'] = false;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../styles/crearPortfolio.css">
-    <style>
-        /* nav */
-        h1 {
-            text-align: center;
-        }
-
-        main nav {
-            background-color: #333;
-            color: white;
-            padding: 1em 0;
-        }
-
-        main nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            padding: 0;
-            gap: 1em;
-        }
-
-        main nav ul li {
-            flex: 0 0 10vw;
-            text-align: center;
-        }
-
-        main nav ul li a {
-            color: white;
-            text-decoration: none;
-        }
-
-        h2 {
-            text-align: center;
-        }
-
-        form {
-            margin: 5%;
-            display: flex;
-            flex-direction: column;
-            gap: 5%;
-        }
-
-        form div {
-            display: flex;
-            flex-direction: column;
-            gap: 2%;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/style.css">
 </head>
 
 <body>
-    <?php include __DIR__ . "/view_header.php"; ?>
+    <header>
+        <div>
+            <a href="/">Nuevas Tecnologias</a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <?php
+                if (isset($_SESSION['usuario'])) {
+                    echo "<li><a href=./user>Perfil</a></li>";
+                    echo "<li><a href='./logout'>Logout</a></li>";
+                } else {
+                    echo "<li><a href='./registro'>Registro</a></li>";
+                    echo "<li><a href='./login'>Login</a></li>";
+                }
+                ?>
+
+            </ul>
+    </header>
     <main>
         <h1><?php echo $_SESSION["usuario"]["nombre"] . " " . $_SESSION["usuario"]["apellidos"] ?></h1>
         <h2>Añadir Portfolio</h2>

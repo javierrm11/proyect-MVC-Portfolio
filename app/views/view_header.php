@@ -46,24 +46,6 @@
 </head>
 
 </html>
-<header>
-    <div>
-        <a href="/">Nuevas Tecnologias</a>
-    </div>
-    <nav>
-        <ul>
-            <li><a href="/">Inicio</a></li>
-            <?php
-            if (isset($_SESSION['usuario'])) {
-                echo "<li><a href=./user>Perfil</a></li>";
-                echo "<li><a href='./logout'>Logout</a></li>";
-            } else {
-                echo "<li><a href='./registro'>Registro</a></li>";
-                echo "<li><a href='./login'>Login</a></li>";
-            }
-            ?>
 
-        </ul>
-</header>
 
 </html>

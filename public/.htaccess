@@ -1,8 +1,12 @@
 RewriteEngine On
 
-RewriteRule ^(css|script|imagenes)($|/) - [L]
+# No redirigir las solicitudes a carpetas de recursos estáticos (CSS, JS, imágenes, etc.)
+RewriteCond %{REQUEST_URI} ^/(styles|css|script|imagenes) [NC]
+RewriteRule .* - [L]
+
+# Redirige todo lo demás a index.php
 RewriteRule ^(.*)$ index.php [L]
 
+# Para manejar la autorización (opcional, si es necesario)
 RewriteCond %{HTTP:Authorization} ^(.+)$
-RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}] 
-RewriteRule ^imagenes/(.*)$ ../app/imagenes/$1 [L]
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

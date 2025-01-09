@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers;
 // Iniciar la sesión
 session_start();
@@ -84,7 +85,7 @@ class UsuariosController extends BaseController
             // Subir la imagen
             if (isset($_FILES['foto']) && $_FILES['foto']['error'] == 0) {
                 $foto = $_FILES['foto'];
-                $imagenesDir = __DIR__ . '/../imagenes/';
+                $imagenesDir = __DIR__ . '/../../public/imagenes/';
                 if (!is_dir($imagenesDir)) {
                     mkdir($imagenesDir, 0777, true);
                 }
@@ -237,6 +238,17 @@ class UsuariosController extends BaseController
         }
 
         $this->renderHTML('../app/views/view_activar.php', ['mensaje' => $mensaje]);
+    }
+    public function buscar()
+    {
+        if(isset($_POST['buscar'])){
+            $buscar =  $_POST['buscar'] ?? "";
+            $usuario = Usuario::getInstancia();
+            $resultados = $usuario->buscar(strtolower($buscar));
+            $this->renderHTML('../app/views/index_view.php', ['usuarios' => $resultados, 'buscar' => $buscar]);
+        } else {
+            header('Location: ./');
+        }
     }
     public function LogoutAction()
     {

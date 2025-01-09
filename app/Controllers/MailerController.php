@@ -9,7 +9,7 @@ class MailerService
 
     public function __construct()
     {
-        $dsn = $_ENV['MAILER_DSN']; // Desde el archivo .env
+        $dsn = $_ENV['MAILER_DSN'];
         $transport = Transport::fromDsn($dsn);
         $this->mailer = new Mailer($transport);
     }

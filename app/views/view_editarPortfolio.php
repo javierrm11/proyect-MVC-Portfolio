@@ -6,104 +6,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="../styles/editarPortfolio.css">
-    <style>
-        /* nav */
-        h1 {
-            text-align: center;
-        }
-
-        main nav {
-            background-color: #333;
-            color: white;
-            padding: 1em 0;
-        }
-
-        main nav ul {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            padding: 0;
-            gap: 1em;
-        }
-
-        main nav ul li {
-            flex: 0 0 10vw;
-            text-align: center;
-        }
-
-        main nav ul li a {
-            color: white;
-            text-decoration: none;
-        }
-
-        /* info */
-        main article {
-            padding: 1em;
-        }
-
-        article h2 {
-            text-align: center;
-            color: #333;
-        }
-
-        article>p {
-            text-align: center;
-            color: #333;
-        }
-
-        article img {
-            display: block;
-            margin: 0 auto;
-            width: 50%;
-        }
-
-        article>form div {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1em;
-            margin: 5vh 20vw;
-            background-color: blue;
-            padding: 2em;
-        }
-
-        div h3 {
-            color: white;
-            flex: 0 0 100%;
-        }
-
-        div p,
-        h4 {
-            color: white;
-            flex: 0 0 100%;
-        }
-
-        form>div>div {
-            flex: 0 0 100%;
-            display: flex;
-            margin: 0;
-        }
-
-        form>div>div>input {
-            flex: 1;
-        }
-
-        form>div>div>label {
-            flex: 1;
-            color: white;
-        }
-
-        form>div>a {
-            text-decoration: none;
-            color: blue;
-            background: white;
-            padding: 1vh 1.5vw;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/style.css">
 </head>
 
 <body>
-    <?php include __DIR__ . "/view_header.php"; ?>
+    <header>
+        <div>
+            <a href="/">Nuevas Tecnologias</a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <?php
+                if (isset($_SESSION['usuario'])) {
+                    echo "<li><a href=./user>Perfil</a></li>";
+                    echo "<li><a href='./logout'>Logout</a></li>";
+                } else {
+                    echo "<li><a href='./registro'>Registro</a></li>";
+                    echo "<li><a href='./login'>Login</a></li>";
+                }
+                ?>
+
+            </ul>
+    </header>
     <main>
         <h1>Portfolio</h1>
         <nav>

@@ -3,42 +3,35 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
     <link rel="stylesheet" href="../styles/style.css">
-    <style>
-        h1 {
-            text-align: center;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-            width: 50%;
-            margin: 0 auto;
-        }
-        label {
-            margin-top: 10px;
-        }
-        input {
-            margin-top: 5px;
-            padding: 5px;
-        }
-        input[type="submit"] {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: green;
-            color: white;
-            cursor: pointer;
-        }
-        .center {
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/login.css">
 </head>
+
 <body>
-    <?php include __DIR__ . "/view_header.php"; ?>
+    <header>
+        <div>
+            <a href="/">Nuevas Tecnologias</a>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="/">Inicio</a></li>
+                <?php
+                if (isset($_SESSION['usuario'])) {
+                    echo "<li><a href=./user>Perfil</a></li>";
+                    echo "<li><a href='./logout'>Logout</a></li>";
+                } else {
+                    echo "<li><a href='./registro'>Registro</a></li>";
+                    echo "<li><a href='./login'>Login</a></li>";
+                }
+                ?>
+
+            </ul>
+    </header>
     <h1>Iniciar Sesión</h1>
     <form action="" method="post">
         <label for="email">Email</label>
@@ -53,4 +46,5 @@ require_once __DIR__ . '/../../vendor/autoload.php';
         <p><?php echo $data['eCredenciales']; ?></p>
     </form>
 </body>
+
 </html>

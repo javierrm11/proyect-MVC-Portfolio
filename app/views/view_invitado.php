@@ -45,21 +45,7 @@ require_once __DIR__ . '/../Models/DBAbstractModel.php';
 </head>
 
 <body>
-    <?php include __DIR__ . '/view_header.php'; ?>
-    <main id="invitado">
-        <h1>Página de inicio</h1>
-        <p>Estás como invitado</p>
-        <section>
-            <?php
-            foreach ($data['usuarios'] as $usuario) {
-                echo "<article>";
-                echo "<h2>" . $usuario['nombre'] . "</h2>";
-                echo "<p>" . $usuario['email'] . "</p>";
-                echo "</article>";
-            }
-            ?>
-        </section>
-    </main>
+    
 </body>
 
 </html>

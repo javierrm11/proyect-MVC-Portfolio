@@ -180,10 +180,33 @@ class Usuario extends DBAbstractModel{
         $this->parametros['fecha_creacion_token']= $this->fecha_creacion_token;
         $this->parametros['cuenta_activa']= $this->cuenta_activa;
 
-        var_dump($this->query);
         $this->get_results_from_query();
         //$this->execute_single_query();
         $this->mensaje = 'Usuario añadido.';
+    }
+    public function buscar($buscar)
+    {
+        $this->query = "
+            SELECT DISTINCT 
+            LOWER(u.nombre) as nombre,
+            LOWER(u.email) as email,
+            u.foto,
+            LOWER(p.titulo),
+            LOWER(t.titulo),
+            LOWER(s.habilidades)
+            FROM usuarios u
+            LEFT JOIN proyectos p ON u.id = p.usuarios_id
+            LEFT JOIN trabajos t ON u.id = t.usuarios_id
+            LEFT JOIN skills s ON u.id = s.usuarios_id
+            WHERE LOWER(u.nombre) LIKE LOWER(:buscar) AND u.cuenta_activa = 1
+            OR LOWER(u.email) LIKE LOWER(:buscar) AND u.cuenta_activa = 1
+            OR LOWER(p.titulo) LIKE LOWER(:buscar) AND u.cuenta_activa = 1
+            OR LOWER(t.titulo) LIKE LOWER(:buscar) AND u.cuenta_activa = 1
+            OR LOWER(s.habilidades) LIKE LOWER(:buscar) AND u.cuenta_activa = 1
+        ";
+        $this->parametros['buscar'] = '%' . $buscar . '%';
+        $this->get_results_from_query();
+        return $this->rows;
     }
     
     

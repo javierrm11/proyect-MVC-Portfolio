@@ -298,110 +298,132 @@ class PortfolioController extends BaseController
 
     public function borrar()
     {
-        session_start();
+        $portfolioModel = Portfolio::getInstancia();
+        
         if (!isset($_SESSION['usuario'])) {
-            header('Location: view_login.php');
+            header('Location: ../');
             exit();
         }
 
         $usuarioId = $_SESSION['usuario']['id'];
-        $portfolioModel = Portfolio::getInstancia();
         $portfolioModel->deletePortfolio($usuarioId);
 
         $_SESSION["portfolio"] = false;
         header("Location: ./user");
         exit();
     }
+
     // Trabajos
     public function mostrarTrabajo()
     {
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: view_login.php');
-            exit();
-        }
+        $portfolioModel = Portfolio::getInstancia();
+        // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
+        $idUser = $portfolioModel->getUserTrabajo($id);
+        // comprobamos si el usuario es el propietario del trabajo
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            header('Location: ../');
+            exit();
+        }
 
-        $portfolioModel = Portfolio::getInstancia();
-        $portfolioModel->mostrarTrabajo($id);
-
+        $portfolioModel->mostrarTrabajo($id); // mostramos el trabajo
+        // redirigimos a la vista de editar
         $_SESSION['mensaje'] = "Trabajo mostrado con éxito.";
         header('Location: ../editar');
     }
 
     public function ocultarTrabajo()
     {
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: view_login.php');
-            exit();
-        }
+        $portfolioModel = Portfolio::getInstancia();
+        // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
+        $idUser = $portfolioModel->getUserTrabajo($id);
+        // comprobamos si el usuario es el propietario del trabajo
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            header('Location: ../');
+            exit();
+        }
+        // ocultamos el trabajo
         $portfolioModel = Portfolio::getInstancia();
         $portfolioModel->ocultarTrabajo($id);
-
+        // redirigimos a la vista de editar
         $_SESSION['mensaje'] = "Trabajo ocultado con éxito.";
         header('Location: ../editar');
     }
     // Proyectos
     public function mostrarProyecto()
     {
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: view_login.php');
-            exit();
-        }
+        $portfolioModel = Portfolio::getInstancia();
+        // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
+        $idUser = $portfolioModel->getUserProyecto($id);
+        // comprobamos si el usuario es el propietario del proyecto
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            header('Location: ../');
+            exit();
+        }
 
-        $portfolioModel = Portfolio::getInstancia();
-        $portfolioModel->mostrarProyecto($id);
-
+        $portfolioModel->mostrarProyecto($id); // mostramos el proyecto
+        // redirigimos a la vista de editar
         $_SESSION['mensaje'] = "proyecto mostrado con éxito.";
         header('Location: ../editar');
     }
 
     public function ocultarProyecto()
     {
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: view_login.php');
-            exit();
-        }
+        $portfolioModel = Portfolio::getInstancia();
+        // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
+        $idUser = $portfolioModel->getUserProyecto($id);
+        // comprobamos si el usuario es el propietario del proyecto
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            header('Location: ../');
+            exit();
+        }
 
-        $portfolioModel = Portfolio::getInstancia();
-        $portfolioModel->ocultarProyecto($id);
-
+        $portfolioModel->ocultarProyecto($id);  // ocultamos el proyecto
+        // redirigimos a la vista de editar
         $_SESSION['mensaje'] = "proyecto ocultado con éxito.";
         header('Location: ../editar');
     }
     // Skills
     public function mostrarSkill()
     {
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: view_login.php');
-            exit();
-        }
+        $portfolioModel = Portfolio::getInstancia();
+        // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
+        $idUser = $portfolioModel->getUserSkill($id);
+        // comprobamos si el usuario es el propietario del proyecto
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            header('Location: ../');
+            exit();
+        }
 
-        $portfolioModel = Portfolio::getInstancia();
-        $portfolioModel->mostrarSkill($id);
-
+        $portfolioModel->mostrarSkill($id); // mostramos el skill
+        // redirigimos a la vista de editar
         $_SESSION['mensaje'] = "Skill mostrado con éxito.";
         header('Location: ../editar');
     }
     public function ocultarSkill()
     {
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: view_login.php');
-            exit();
-        }
+        $portfolioModel = Portfolio::getInstancia();
+        // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
+        $idUser = $portfolioModel->getUserSkill($id);
+        // comprobamos si el usuario es el propietario del proyecto
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            header('Location: ../');
+            exit();
+        }
 
-        $portfolioModel = Portfolio::getInstancia();
-        $portfolioModel->ocultarSkill($id);
+        $portfolioModel->ocultarSkill($id); // ocultamos el skill
+        // redirigimos a la vista de editar
         $_SESSION['mensaje'] = "Skill ocultado con éxito.";
         header('Location: ../editar');
     }
