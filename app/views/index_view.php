@@ -12,7 +12,7 @@
 <body>
     <header>
         <div>
-            <a href="/">Nuevas Tecnologias</a>
+            <a href="/">PortfoliosHub</a>
         </div>
         <nav>
             <ul>
@@ -36,8 +36,6 @@
             echo "<p class='info'>" . $_SESSION['usuario']['nombre'] . " " . $_SESSION['usuario']['apellidos'] . "</p>";
             echo "<img src='/imagenes/"  . $_SESSION['usuario']['foto'] . "' alt='Foto de perfil'>";
             echo "</div>";
-        } else {
-            echo "<p>Invitado</p>";
         }
         ?>
         <h1>PORTFOLIOS</h1>
@@ -53,6 +51,7 @@
                     echo "<img src='/imagenes/" . htmlspecialchars($usuario['foto']) . "' alt='Foto de perfil'>";
                     echo "<h2>" . htmlspecialchars($usuario['nombre']) . "</h2>";
                     echo "<p class='email'>" . htmlspecialchars($usuario['email']) . "</p>";
+                    echo "<a href='/portfolio/" . htmlspecialchars($usuario['id']) . "'>Ver portfolio</a>";
                     echo "</article>";
                 }
             } else {

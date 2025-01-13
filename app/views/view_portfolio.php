@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Portfolio</title>
     <link rel="stylesheet" href="../styles/user.css">
     <link rel="stylesheet" href="../styles/style.css">
 </head>
@@ -12,18 +12,18 @@
 <body>
     <header>
         <div>
-            <a href="/">Nuevas Tecnologias</a>
+            <a href="/">PortfoliosHub</a>
         </div>
         <nav>
             <ul>
                 <li><a href="/">Inicio</a></li>
                 <?php
                 if (isset($_SESSION['usuario'])) {
-                    echo "<li><a href=./user>Perfil</a></li>";
-                    echo "<li><a href='./logout'>Logout</a></li>";
+                    echo "<li><a href=../user>Perfil</a></li>";
+                    echo "<li><a href='../logout'>Logout</a></li>";
                 } else {
-                    echo "<li><a href='./registro'>Registro</a></li>";
-                    echo "<li><a href='./login'>Login</a></li>";
+                    echo "<li><a href='../registro'>Registro</a></li>";
+                    echo "<li><a href='../login'>Login</a></li>";
                 }
                 ?>
 
@@ -31,30 +31,13 @@
     </header>
     <main>
         <h1>Portfolio</h1>
-        <nav>
-            <ul>
-                <?php
-                if ($data['portfolioExists']) {
-                    echo "<li><a href='./editar'>Editar</a></li>";
-                    if($_SESSION['usuario']['visible'] == 1){
-                        echo "<li><a href='./ocultarUsuario'>Ocultar usuario</a></li>";
-                    }else{
-                        echo "<li><a href='./mostrarUsuario'>Mostrar usuario</a></li>";
-                    }
-                    echo "<li><a href='./borrar'>Borrar</a></li>";
-                } else {
-                    echo "<li><a href='./crearPortfolio'>Crear</a></li>";
-                }
-                ?>
-            </ul>
-        </nav>
         <article>
-            <h2><?php echo $_SESSION["usuario"]["nombre"] . " " . $_SESSION["usuario"]["apellidos"] ?></h2>
-            <p><?php echo $_SESSION["usuario"]["categoria_profesional"] ?></p>
-            <img src="/imagenes/<?php echo $_SESSION['usuario']['foto']; ?>" alt="Foto de perfil">
-            <p><?php echo $_SESSION["usuario"]["email"] ?></p>
+            <h2><?php echo $data['usuario'][0]['nombre'] . " " . $data['usuario'][0]['apellidos'] ?></h2>
+            <p><?php echo $data["usuario"][0]["categoria_profesional"] ?></p>
+            <img src="/imagenes/<?php echo $data['usuario'][0]['foto']; ?>" alt="Foto de perfil">
+            <p><?php echo $data["usuario"][0]["email"] ?></p>
             <?php
-            if ($data['portfolioExists']) { ?>
+            if($data['portfolioExists']) { ?>
                 <div>
                     <h3>Trabajos</h3>
                     <?php
@@ -98,13 +81,13 @@
                 <div>
                     <h3>Redes Sociales</h3>
                     <?php
-                    foreach ($data['redesSociales'] as $redes) { ?>
+                    foreach ($data['redes_sociales'] as $redes) { ?>
                         <h4><?php echo $redes["redes_socialescol"] ?></h4>
                         <p><?php echo $redes["url"] ?></p>
                     <?php } ?>
                 </div>
             <?php } else {
-                echo "<p>No tienes un portfolio creado</p>";
+                echo "<p>No tiene portfolio creado</p>";
             }
             ?>
         </article>

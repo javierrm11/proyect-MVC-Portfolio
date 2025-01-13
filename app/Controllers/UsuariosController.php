@@ -32,7 +32,7 @@ class UsuariosController extends BaseController
         $data = [
             'nombre' => '',
             'apellidos' => '',
-            'foto' => '',
+            'foto' => 'predeterminado.png',
             'categoria_profesional' => '',
             'email' => '',
             'resumen_perfil' => '',
@@ -98,9 +98,6 @@ class UsuariosController extends BaseController
                     $data['eFoto'] = 'Error al subir la imagen';
                     $lProcesaFormulario = false;
                 }
-            } else {
-                $data['eFoto'] = 'La foto es obligatoria';
-                $lProcesaFormulario = false;
             }
 
             // Si no hay errores, se crea el usuario
@@ -214,15 +211,15 @@ class UsuariosController extends BaseController
     {
         if (isset($_GET['token'])) {
             $token = $_GET['token'];
+            $token = str_replace(" ", "+", $token);
 
             $usuario = Usuario::getInstancia();
             $user = $usuario->getT($token);
-
             if ($user) {
                 $fecha_creacion_token = new \DateTime($user[0]['fecha_creacion_token']);
                 $fecha_actual = new \DateTime();
                 $intervalo = $fecha_creacion_token->diff($fecha_actual);
-
+                var_dump($fecha_creacion_token);
                 if ($intervalo->h < 24) {
                     $usuario->setId($user[0]['id']);
                     $usuario->editCuentaActiva();
@@ -249,6 +246,26 @@ class UsuariosController extends BaseController
         } else {
             header('Location: ./');
         }
+    }
+    public function ocultarUsuarioAction(){
+        if(!isset($_SESSION['usuario'])){
+            header('Location: ./');
+        }
+        $usuario = Usuario::getInstancia();
+        $usuario->setId($_SESSION['usuario']['id']);
+        $usuario->ocultarUsuario();
+        $_SESSION['usuario']['visible'] = 0;
+        header('Location: ./user');
+    }
+    public function mostrarUsuarioAction(){
+        if(!isset($_SESSION['usuario'])){
+            header('Location: ./');
+        }
+        $usuario = Usuario::getInstancia();
+        $usuario->setId($_SESSION['usuario']['id']);
+        $usuario->mostrarUsuario();
+        $_SESSION['usuario']['visible'] = 1;
+        header('Location: ./user');
     }
     public function LogoutAction()
     {

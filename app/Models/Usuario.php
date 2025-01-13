@@ -139,7 +139,7 @@ class Usuario extends DBAbstractModel{
         return $this->mensaje;
     }
     public function getAll(){
-        $this->query = "SELECT * FROM usuarios where cuenta_activa = 1";
+        $this->query = "SELECT * FROM usuarios where cuenta_activa = 1 AND visible = 1";
         $this->get_results_from_query();
         if(count($this->rows) > 0){
             return $this->rows;
@@ -188,6 +188,7 @@ class Usuario extends DBAbstractModel{
     {
         $this->query = "
             SELECT DISTINCT 
+            u.id,
             LOWER(u.nombre) as nombre,
             LOWER(u.email) as email,
             u.foto,
@@ -198,15 +199,23 @@ class Usuario extends DBAbstractModel{
             LEFT JOIN proyectos p ON u.id = p.usuarios_id
             LEFT JOIN trabajos t ON u.id = t.usuarios_id
             LEFT JOIN skills s ON u.id = s.usuarios_id
-            WHERE LOWER(u.nombre) LIKE LOWER(:buscar) AND u.cuenta_activa = 1
-            OR LOWER(u.email) LIKE LOWER(:buscar) AND u.cuenta_activa = 1
-            OR LOWER(p.titulo) LIKE LOWER(:buscar) AND u.cuenta_activa = 1
-            OR LOWER(t.titulo) LIKE LOWER(:buscar) AND u.cuenta_activa = 1
-            OR LOWER(s.habilidades) LIKE LOWER(:buscar) AND u.cuenta_activa = 1
+            WHERE LOWER(u.nombre) LIKE LOWER(:buscar) AND u.cuenta_activa = 1 AND u.visible = 1
+            OR LOWER(p.titulo) LIKE LOWER(:buscar) AND u.cuenta_activa = 1 AND u.visible = 1
+            OR LOWER(t.titulo) LIKE LOWER(:buscar) AND u.cuenta_activa = 1 AND u.visible = 1
+            OR LOWER(s.habilidades) LIKE LOWER(:buscar) AND u.cuenta_activa = 1 AND u.visible = 1
         ";
         $this->parametros['buscar'] = '%' . $buscar . '%';
         $this->get_results_from_query();
-        return $this->rows;
+        
+        // Borra duplicados
+        $uniqueUsers = [];
+        foreach ($this->rows as $row) {
+            if (!isset($uniqueUsers[$row['id']])) {
+                $uniqueUsers[$row['id']] = $row;
+            }
+        }
+        
+        return array_values($uniqueUsers);
     }
     
     
@@ -218,5 +227,19 @@ class Usuario extends DBAbstractModel{
         $this->parametros['id'] = $this->id;
         $this->get_results_from_query();
         $this->mensaje = 'Cuenta activada con éxito. Ahora puedes iniciar sesión.';
+    }
+    public function ocultarUsuario(){
+        $this->query = "UPDATE usuarios 
+        SET visible = 0 WHERE id = :id";
+        $this->parametros['id'] = $this->id;
+        $this->get_results_from_query();
+        $this->mensaje = 'Usuario ocultado con éxito.';
+    }
+    public function mostrarUsuario(){
+        $this->query = "UPDATE usuarios 
+        SET visible = 1 WHERE id = :id";
+        $this->parametros['id'] = $this->id;
+        $this->get_results_from_query();
+        $this->mensaje = 'Usuario ocultado con éxito.';
     }
 }

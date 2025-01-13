@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Editar Portfolio</title>
     <link rel="stylesheet" href="../styles/editarPortfolio.css">
     <link rel="stylesheet" href="../styles/style.css">
 </head>
@@ -12,7 +12,7 @@
 <body>
     <header>
         <div>
-            <a href="/">Nuevas Tecnologias</a>
+            <a href="/">PortfoliosHub</a>
         </div>
         <nav>
             <ul>
@@ -26,135 +26,98 @@
                     echo "<li><a href='./login'>Login</a></li>";
                 }
                 ?>
-
-            </ul>
-    </header>
-    <main>
-        <h1>Portfolio</h1>
-        <nav>
-            <ul>
-                <?php
-                if ($data['portfolioExists']) {
-                    echo "<li><a href='/editar'>Editar</a></li>";
-                    echo "<li><a href='/borrar'>Borrar</a></li>";
-                } else {
-                    echo "<li><a href='/crearPortfolio'>Crear</a></li>";
-                }
-                ?>
             </ul>
         </nav>
-        <article>
-            <?php
-            if ($data['portfolioExists']) { ?>
-                <h2><?php echo $_SESSION["usuario"]["nombre"] . " " . $_SESSION["usuario"]["apellidos"] ?></h2>
-                <p><?php echo $_SESSION["usuario"]["categoria_profesional"] ?></p>
-                <img src="<?php echo $_SESSION["usuario"]["foto"] ?>" alt="Foto de perfil">
-                <p><?php echo $_SESSION["usuario"]["email"] ?></p>
-                <form action="" method="post">
+    </header>
+    <main>
+        <h1>Editar Portfolio</h1>
+        <form action="" method="post">
+            <div>
+                <h3>Trabajos</h3>
+                <?php foreach ($data['trabajos'] as $trabajo): ?>
                     <div>
-                        <h3>Trabajos</h3>
-                        <?php
-                        foreach ($data['trabajos'] as $trabajo) { ?>
-                            <div>
-                                <label><?php echo $trabajo["titulo"] ?></label>
-                                <input type="text" name="tituloTrabajos" value="<?php echo $trabajo["titulo"] ?>">
-                                <p><?php echo $data['eTituloTrabajos'] ?></p>
-                            </div>
-                            <div>
-                                <label><?php echo $trabajo["descripcion"] ?></label>
-                                <input type="text" name="descripcionTrabajos" value="<?php echo $trabajo["descripcion"] ?>">
-                                <p><?php echo $data['eDescripcionTrabajos'] ?></p>
-                            </div>
-                            <div>
-                                <label><?php echo $trabajo["fecha_inicio"] ?></label>
-                                <input type="date" name="fecha_inicioTrabajos" value="<?php echo $trabajo["fecha_inicio"] ?>">
-                                <p><?php echo $data['eFecha_inicioTrabajos'] ?></p>
-                            </div>
-                            <div>
-                                <label><?php echo $trabajo["fecha_final"] ?></label>
-                                <input type="date" name="fecha_finTrabajos" value="<?php echo $trabajo["fecha_final"] ?>">
-                                <p><?php echo $data['eFecha_finTrabajos'] ?></p>
-                            </div>
-                            <div>
-                                <label><?php echo $trabajo["logros"] ?></label>
-                                <input type="text" name="logrosTrabajos" value="<?php echo $trabajo["logros"] ?>">
-                                <p><?php echo $data['eLogrosTrabajos'] ?></p>
-                            </div>
-                            <?php
-                            if ($trabajo["visible"] == 1) { ?>
-                                <a href="/ocultarTrabajo/<?php echo $trabajo['id']; ?>">Ocultar</a>
-                            <?php } else { ?>
-                                <a href="/mostrarTrabajo/<?php echo $trabajo['id']; ?>">Mostrar</a>
-                            <?php } ?>
-                        <?php } ?>
+                        <label for="tituloTrabajos_<?php echo $trabajo['id']; ?>">Título</label>
+                        <input type="text" id="tituloTrabajos_<?php echo $trabajo['id']; ?>" name="tituloTrabajos_<?php echo $trabajo['id']; ?>" value="<?php echo htmlspecialchars($trabajo['titulo']); ?>">
                     </div>
                     <div>
-                        <h3>Proyectos</h3>
-                        <?php
-                        foreach ($data['proyectos'] as $proyecto) { ?>
-                            <div>
-                                <label><?php echo $proyecto["titulo"] ?></label>
-                                <input type="text" name="tituloProyectos" value="<?php echo $proyecto["titulo"] ?>">
-                                <p><?php echo $data['eTituloProyectos'] ?></p>
-                            </div>
-                            <div>
-                                <label><?php echo $proyecto["descripcion"] ?></label>
-                                <input type="text" name="descripcionProyectos" value="<?php echo $proyecto["descripcion"] ?>">
-                                <p><?php echo $data['eDescripcionProyectos'] ?></p>
-                            </div>
-                            <div>
-                                <label><?php echo $proyecto["tecnologias"] ?></label>
-                                <input type="text" name="tecnologiasProyectos" value="<?php echo $proyecto["tecnologias"] ?>">
-                                <p><?php echo $data['eTecnologiasProyectos'] ?></p>
-                            </div>
-                            <?php
-                            if ($proyecto["visible"] == 1) { ?>
-                                <a href="/ocultarProyecto/<?php echo $proyecto['id']; ?>">Ocultar</a>
-                            <?php } else { ?>
-                                <a href="/mostrarProyecto/<?php echo $proyecto['id']; ?>">Mostrar</a>
-                            <?php } ?>
-                        <?php } ?>
+                        <label for="descripcionTrabajos_<?php echo $trabajo['id']; ?>">Descripción</label>
+                        <input type="text" id="descripcionTrabajos_<?php echo $trabajo['id']; ?>" name="descripcionTrabajos_<?php echo $trabajo['id']; ?>" value="<?php echo htmlspecialchars($trabajo['descripcion']); ?>">
                     </div>
                     <div>
-                        <h3>Skills</h3>
-                        <?php
-                        foreach ($data['skills'] as $skill) { ?>
-                            <div>
-                                <label><?php echo $skill["habilidades"] ?></label>
-                                <input type="text" name="habilidades" value="<?php echo $skill["habilidades"] ?>">
-                                <p><?php echo $data['eHabilidades'] ?></p>
-                            </div>
-                            <div>
-                                <label><?php echo $skill["categorias_skills_categoria"] ?></label>
-                                <input type="text" name="categoria" value="<?php echo $skill["categorias_skills_categoria"] ?>">
-                                <p><?php echo $data['eCategoria'] ?></p>
-                            </div>
-                            <?php
-                            if ($skill["visible"] == 1) { ?>
-                                <a href="/ocultarSkill/<?php echo $skill['id']; ?>">Ocultar</a>
-                            <?php } else { ?>
-                                <a href="/mostrarSkill/<?php echo $skill['id']; ?>">Mostrar</a>
-                            <?php } ?>
-                        <?php } ?>
+                        <label for="fecha_inicioTrabajos_<?php echo $trabajo['id']; ?>">Fecha de inicio</label>
+                        <input type="date" id="fecha_inicioTrabajos_<?php echo $trabajo['id']; ?>" name="fecha_inicioTrabajos_<?php echo $trabajo['id']; ?>" value="<?php echo htmlspecialchars($trabajo['fecha_inicio']); ?>">
+
                     </div>
                     <div>
-                        <h3>Redes Sociales</h3>
-                        <?php
-                        foreach ($data['redesSociales'] as $redes) { ?>
-                            <div>
-                                <h4><?php echo $redes["redes_socialescol"] ?></h4>
-                                <input type="text" name="<?php echo $redes["redes_socialescol"] ?>" value="<?php echo $redes["url"] ?>">
-                                <p><?php echo $data['e' . ucfirst($redes["redes_socialescol"])] ?></p>
-                            </div>
-                        <?php } ?>
+                        <label for="fecha_finTrabajos_<?php echo $trabajo['id']; ?>">Fecha de fin</label>
+                        <input type="date" id="fecha_finTrabajos_<?php echo $trabajo['id']; ?>" name="fecha_finTrabajos_<?php echo $trabajo['id']; ?>" value="<?php echo htmlspecialchars($trabajo['fecha_final']); ?>">
                     </div>
-                    <input type="submit" name="guardar" value="Guardar">
-                </form>
-            <?php } else {
-                echo "<p>No tienes un portfolio creado</p>";
-            }
-            ?>
-        </article>
+                    <div>
+                        <label for="logrosTrabajos_<?php echo $trabajo['id']; ?>">Logros</label>
+                        <input type="text" id="logrosTrabajos_<?php echo $trabajo['id']; ?>" name="logrosTrabajos_<?php echo $trabajo['id']; ?>" value="<?php echo htmlspecialchars($trabajo['logros']); ?>">
+                    </div>
+                    <?php if ($trabajo['visible'] == 1): ?>
+                        <a href="/ocultarTrabajo/<?php echo $trabajo['id']; ?>">Ocultar</a>
+                    <?php else: ?>
+                        <a href="/mostrarTrabajo/<?php echo $trabajo['id']; ?>">Mostrar</a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                <a href="/addTrabajo/<?php echo $_SESSION['usuario']['id']; ?>">Añadir Trabajo</a>
+            </div>
+            <div>
+                <h3>Proyectos</h3>
+                <?php foreach ($data['proyectos'] as $proyecto): ?>
+                    <div>
+                        <label for="tituloProyectos_<?php echo $proyecto['id']; ?>">Título</label>
+                        <input type="text" id="tituloProyectos_<?php echo $proyecto['id']; ?>" name="tituloProyectos_<?php echo $proyecto['id']; ?>" value="<?php echo htmlspecialchars($proyecto['titulo']); ?>">
+                    </div>
+                    <div>
+                        <label for="descripcionProyectos_<?php echo $proyecto['id']; ?>">Descripción</label>
+                        <input type="text" id="descripcionProyectos_<?php echo $proyecto['id']; ?>" name="descripcionProyectos_<?php echo $proyecto['id']; ?>" value="<?php echo htmlspecialchars($proyecto['descripcion']); ?>">
+                    </div>
+                    <div>
+                        <label for="tecnologiasProyectos_<?php echo $proyecto['id']; ?>">Tecnologías</label>
+                        <input type="text" id="tecnologiasProyectos_<?php echo $proyecto['id']; ?>" name="tecnologiasProyectos_<?php echo $proyecto['id']; ?>" value="<?php echo htmlspecialchars($proyecto['tecnologias']); ?>">
+                    </div>
+                    <?php if ($proyecto['visible'] == 1): ?>
+                        <a href="/ocultarProyecto/<?php echo $proyecto['id']; ?>">Ocultar</a>
+                    <?php else: ?>
+                        <a href="/mostrarProyecto/<?php echo $proyecto['id']; ?>">Mostrar</a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                <a href="/addProyecto/<?php echo $_SESSION['usuario']['id']; ?>">Añadir Proyecto</a>
+            </div>
+            <div>
+                <h3>Skills</h3>
+                <?php foreach ($data['skills'] as $skill): ?>
+                    <div>
+                        <label for="habilidades_<?php echo $skill['id']; ?>">Habilidades</label>
+                        <input type="text" id="habilidades_<?php echo $skill['id']; ?>" name="habilidades_<?php echo $skill['id']; ?>" value="<?php echo htmlspecialchars($skill['habilidades']); ?>">
+                    </div>
+                    <div>
+                        <label for="categoria_<?php echo $skill['id']; ?>">Categoría</label>
+                        <input type="text" id="categoria_<?php echo $skill['id']; ?>" name="categoria_<?php echo $skill['id']; ?>" value="<?php echo htmlspecialchars($skill['categorias_skills_categoria']); ?>">
+                    </div>
+                    <?php if ($skill['visible'] == 1): ?>
+                        <a href="/ocultarSkill/<?php echo $skill['id']; ?>">Ocultar</a>
+                    <?php else: ?>
+                        <a href="/mostrarSkill/<?php echo $skill['id']; ?>">Mostrar</a>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+                <a href="/addSkill/<?php echo $_SESSION['usuario']['id']; ?>">Añadir Skills</a>
+            </div>
+            <div>
+                <h3>Redes Sociales</h3>
+                <?php foreach ($data['redesSociales'] as $redes): ?>
+                    <div>
+                        <h4><?php echo htmlspecialchars($redes['redes_socialescol']); ?></h4>
+                        <input type="text" name="redes_<?php echo $redes['id']; ?>" value="<?php echo htmlspecialchars($redes['url']); ?>">
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <p><?php echo $data['error'] ?></p>
+            <input type="submit" name="guardar" value="Guardar">
+        </form>
     </main>
 </body>
 

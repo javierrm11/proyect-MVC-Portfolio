@@ -5,10 +5,16 @@ require_once "../bootstrap.php";
 require_once "../app/Controllers/UsuariosController.php";
 require_once "../app/Core/Router.php";
 require_once "../app/Controllers/PortfolioController.php";
+require_once "../app/Controllers/TrabajosController.php";
+require_once "../app/Controllers/ProyectosController.php";
+require_once "../app/Controllers/SkillsController.php";
 
 // Usamos el espacio de nombre
 
 use App\Controllers\PortfolioController;
+use App\Controllers\ProyectosControllers;
+use App\Controllers\SkillsController;
+use App\Controllers\TrabajosControllers;
 use App\Core\Router;
 use App\Controllers\UsuariosController;
 
@@ -96,6 +102,41 @@ $router->add([
     'name' => 'buscar',
     'path' => '/^\/buscar$/',
     'action' => [UsuariosController::class, 'buscar']
+]);
+$router->add([
+    'name' => 'addTrabajo',
+    'path' => '/^\/addTrabajo\/(\d+)$/',
+    'action' => [TrabajosControllers::class, 'addTrabajoAction']
+]);
+$router->add([
+    'name' => 'addProyecto',
+    'path' => '/^\/addProyecto\/(\d+)$/',
+    'action' => [ProyectosControllers::class, 'addProyectoAction']
+]);
+$router->add([
+    'name' => 'addSkill',
+    'path' => '/^\/addSkill\/(\d+)$/',
+    'action' => [SkillsController::class, 'addSkillAction']
+]);
+$router->add([
+    'name' => 'portfolio',
+    'path' => '/^\/portfolio\/(\d+)$/',
+    'action' => [PortfolioController::class, 'getPortfolioUser']
+]);
+$router->add([
+    'name' => 'portfolio',
+    'path' => '/^\/portfolio\/(\d+)$/',
+    'action' => [PortfolioController::class, 'getPortfolioUser']
+]);
+$router->add([
+    'name' => 'ocultarUsuario',
+    'path' => '/^\/ocultarUsuario$/',
+    'action' => [UsuariosController::class, 'ocultarUsuarioAction']
+]);
+$router->add([
+    'name' => 'mostrarUsuario',
+    'path' => '/^\/mostrarUsuario$/',
+    'action' => [UsuariosController::class, 'mostrarUsuarioAction']
 ]);
 // Obtenemos la ruta de la petición
 $request = $_SERVER['REQUEST_URI'];

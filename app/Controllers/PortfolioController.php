@@ -3,9 +3,14 @@
 namespace App\Controllers;
 
 use App\Models\Portfolio;
+use App\Models\RedesSociales;
+use App\Models\Proyectos;
+use App\Models\Trabajos;
+use App\Models\Skills;
 
 require_once 'BaseController.php';
 require_once __DIR__ . '/../Models/Portfolio.php';
+require_once __DIR__ . '/../Models/RedesSociales.php';
 
 class PortfolioController extends BaseController
 {
@@ -30,6 +35,17 @@ class PortfolioController extends BaseController
         ];
 
         $this->renderHTML('../app/views/view_user.php', $data);
+    }
+    public function getPortfolioUser(){
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
+        $portfolioModel = Portfolio::getInstancia();
+        $data = $portfolioModel->getPortfolioUser($id);
+        $data['portfolioExists'] = true;
+        if($data['proyectos'] == null || $data['trabajos'] == null || $data['skills'] == null || $data['redes_sociales'] == null){
+            $data['portfolioExists'] = false;
+        }
+        $this->renderHTML('../app/views/view_portfolio.php', $data);
     }
 
     public function create()
@@ -170,128 +186,123 @@ class PortfolioController extends BaseController
     }
     public function edit()
     {
+        $usuarioId = $_SESSION['usuario']['id'];
+        $error = "";
+        $portfolioModel = Portfolio::getInstancia();
+        $portfolio = [];
         if (!isset($_SESSION['usuario'])) {
             header('Location: view_login.php');
             exit();
         }
-
-        $usuarioId = $_SESSION['usuario']['id'];
-        $portfolioModel = Portfolio::getInstancia();
-        $portfolio = $portfolioModel->getPortfolioAll($usuarioId);
-
-        $data = [
-            'portfolioExists' => !empty($portfolio['proyectos']),
-            'trabajos' => $portfolio['trabajos'],
-            'proyectos' => $portfolio['proyectos'],
-            'skills' => $portfolio['skills'],
-            'redesSociales' => $portfolio['redes_sociales'],
-            'eTituloProyectos' => '',
-            'eDescripcionProyectos' => '',
-            'eTecnologiasProyectos' => '',
-            'eTituloTrabajos' => '',
-            'eDescripcionTrabajos' => '',
-            'eFecha_inicioTrabajos' => '',
-            'eFecha_finTrabajos' => '',
-            'eLogrosTrabajos' => '',
-            'eHabilidades' => '',
-            'eCategoria' => '',
-            'eFacebook' => '',
-            'eTwitter' => '',
-            'eLinkedin' => '',
-            'eGithub' => '',
-            'eInstagram' => '',
-            'error' => false
-        ];
-
-        if (isset($_POST["guardar"])) {
-            // Recogemos los datos del formulario
-            $data['tituloProyectos'] = $_POST["tituloProyectos"];
-            $data['descripcionProyectos'] = $_POST["descripcionProyectos"];
-            $data['tecnologiasProyectos'] = $_POST["tecnologiasProyectos"];
-            $data['tituloTrabajos'] = $_POST["tituloTrabajos"];
-            $data['descripcionTrabajos'] = $_POST["descripcionTrabajos"];
-            $data['fecha_inicioTrabajos'] = $_POST["fecha_inicioTrabajos"];
-            $data['fecha_finTrabajos'] = $_POST["fecha_finTrabajos"];
-            $data['logrosTrabajos'] = $_POST["logrosTrabajos"];
-            $data['habilidades'] = $_POST["habilidades"];
-            $data['categoria'] = $_POST["categoria"];
-            $data['facebook'] = $_POST["facebook"];
-            $data['twitter'] = $_POST["twitter"];
-            $data['linkedin'] = $_POST["linkedin"];
-            $data['github'] = $_POST["github"];
-            $data['instagram'] = $_POST["instagram"];
-
-            // Validación de errores
-            if (empty($data['tituloProyectos'])) {
-                $data['eTituloProyectos'] = "El campo titulo es obligatorio";
-                $data['error'] = true;
+        $trabajosModel = Trabajos::getInstancia()->getTrabajos($_SESSION['usuario']['id']);
+        $proyectosModel = Proyectos::getInstancia()->getProyectos($_SESSION['usuario']['id']);
+        $skillsModel = Skills::getInstancia()->getSkills($_SESSION['usuario']['id']);
+        $redesSocialesModel = RedesSociales::getInstancia()->getRedesSociales($_SESSION['usuario']['id']);
+        if(isset($_POST["guardar"])){
+            foreach ($trabajosModel as $trabajo) {
+                $trabajoId = $trabajo['id'];
+                $titulo = $_POST["tituloTrabajos_$trabajoId"];
+                $descripcion = $_POST["descripcionTrabajos_$trabajoId"];
+                $fecha_inicio = $_POST["fecha_inicioTrabajos_$trabajoId"];
+                $fecha_fin = $_POST["fecha_finTrabajos_$trabajoId"];
+                $logros = $_POST["logrosTrabajos_$trabajoId"];
+                if(empty($titulo) || empty($descripcion) || empty($fecha_inicio) || empty($fecha_fin) || empty($logros)){
+                    $error = "Todos los campos son obligatorios";
+                }
             }
-            if (empty($data['descripcionProyectos'])) {
-                $data['eDescripcionProyectos'] = "El campo descripcion es obligatorio";
-                $data['error'] = true;
+            foreach ($proyectosModel as $proyecto) {
+                $proyectoId = $proyecto['id'];
+                $titulo = $_POST["tituloProyectos_$proyectoId"];
+                $descripcion = $_POST["descripcionProyectos_$proyectoId"];
+                $tecnologias = $_POST["tecnologiasProyectos_$proyectoId"];
+                if(empty($titulo) || empty($descripcion) || empty($tecnologias)){
+                    $error = "Todos los campos son obligatorios";
+                }
             }
-            if (empty($data['tecnologiasProyectos'])) {
-                $data['eTecnologiasProyectos'] = "El campo tecnologias es obligatorio";
-                $data['error'] = true;
+            foreach ($skillsModel as $skill) {
+                $skillId = $skill['id'];
+                $habilidades = $_POST["habilidades_$skillId"];
+                $categoria = $_POST["categoria_$skillId"];
+                if(empty($habilidades) || empty($categoria)){
+                    $error = "Todos los campos son obligatorios";
+                }
             }
-            if (empty($data['tituloTrabajos'])) {
-                $data['eTituloTrabajos'] = "El campo titulo es obligatorio";
-                $data['error'] = true;
+            foreach ($redesSocialesModel as $redSocial) {
+                $redSocialId = $redSocial['id'];
+                $redSocialUrl = $_POST["redes_$redSocialId"];
+                if(empty($redSocialUrl)){
+                    $error = "Todos los campos son obligatorios";
+                }
             }
-            if (empty($data['descripcionTrabajos'])) {
-                $data['eDescripcionTrabajos'] = "El campo descripcion es obligatorio";
-                $data['error'] = true;
-            }
-            if (empty($data['fecha_inicioTrabajos'])) {
-                $data['eFecha_inicioTrabajos'] = "El campo fecha de inicio es obligatorio";
-                $data['error'] = true;
-            }
-            if (empty($data['fecha_finTrabajos'])) {
-                $data['eFecha_finTrabajos'] = "El campo fecha de fin es obligatorio";
-                $data['error'] = true;
-            }
-            if (empty($data['logrosTrabajos'])) {
-                $data['eLogrosTrabajos'] = "El campo logros es obligatorio";
-                $data['error'] = true;
-            }
-            if (empty($data['habilidades'])) {
-                $data['eHabilidades'] = "El campo habilidades es obligatorio";
-                $data['error'] = true;
-            }
-            if (empty($data['categoria'])) {
-                $data['eCategoria'] = "El campo categoria es obligatorio";
-                $data['error'] = true;
-            }
-            if (empty($data['facebook'])) {
-                $data['eFacebook'] = "El campo facebook es obligatorio";
-                $data['error'] = true;
-            }
-            if (empty($data['twitter'])) {
-                $data['eTwitter'] = "El campo twitter es obligatorio";
-                $data['error'] = true;
-            }
-            if (empty($data['linkedin'])) {
-                $data['eLinkedin'] = "El campo linkedin es obligatorio";
-                $data['error'] = true;
-            }
-            if (empty($data['github'])) {
-                $data['eGithub'] = "El campo github es obligatorio";
-                $data['error'] = true;
-            }
-            if (empty($data['instagram'])) {
-                $data['eInstagram'] = "El campo instagram es obligatorio";
-                $data['error'] = true;
-            }
-
-            if (!$data['error']) {
-                $data['usuarioId'] = $usuarioId;
-                $portfolioModel->editPortfolio($data);
-
-                // Redirigimos a la vista de usuario
-                header("Location: ./user");
-                exit();
+            if($error == ""){
+                $portfolio["trabajos"] = [];
+                $portfolio["proyectos"] = [];
+                $portfolio["skills"] = [];
+                $portfolio["redes_sociales"] = [];
+                foreach ($trabajosModel as $trabajo) {
+                    $trabajoId = $trabajo['id'];
+                    $titulo = $_POST["tituloTrabajos_$trabajoId"];
+                    $descripcion = $_POST["descripcionTrabajos_$trabajoId"];
+                    $fecha_inicio = $_POST["fecha_inicioTrabajos_$trabajoId"];
+                    $fecha_final = $_POST["fecha_finTrabajos_$trabajoId"];
+                    $logros = $_POST["logrosTrabajos_$trabajoId"];
+                    $trabajo = [
+                        'id' => $trabajoId,
+                        'titulo' => $titulo,
+                        'descripcion' => $descripcion,
+                        'fecha_inicio' => $fecha_inicio,
+                        'fecha_final' => $fecha_final,
+                        'logros' => $logros
+                    ];
+                    $portfolio['trabajos'][] = $trabajo;
+                }
+                foreach ($proyectosModel as $proyecto) {
+                    $proyectoId = $proyecto['id'];
+                    $titulo = $_POST["tituloProyectos_$proyectoId"];
+                    $descripcion = $_POST["descripcionProyectos_$proyectoId"];
+                    $tecnologias = $_POST["tecnologiasProyectos_$proyectoId"];
+                    $proyecto = [
+                        'id' => $proyectoId,
+                        'titulo' => $titulo,
+                        'descripcion' => $descripcion,
+                        'tecnologias' => $tecnologias
+                    ];
+                    $portfolio['proyectos'][] = $proyecto;
+                }
+                foreach ($skillsModel as $skill) {
+                    $skillId = $skill['id'];
+                    $habilidades = $_POST["habilidades_$skillId"];
+                    $categoria = $_POST["categoria_$skillId"];
+                    $skill = [
+                        'id' => $skillId,
+                        'habilidades' => $habilidades,
+                        'categorias_skills_categoria' => $categoria
+                    ];
+                    $portfolio['skills'][] = $skill;
+                }
+                foreach ($redesSocialesModel as $redSocial) {
+                    $redSocialId = $redSocial['id'];
+                    $redSocialUrl = $_POST["redes_$redSocialId"];
+                    $redSocial = [
+                        'id' => $redSocialId,
+                        'url' => $redSocialUrl
+                    ];
+                    $portfolio['redes_sociales'][] = $redSocial;
+                }
+                
+                $portfolioModel->editPortfolio($portfolio);
+                $_SESSION['mensaje'] = "Portfolio actualizado con éxito.";
+                header("Location: ../user");
             }
         }
+        $data = [
+            'trabajos' => $trabajosModel,
+            'proyectos' => $proyectosModel,
+            'skills' => $skillsModel,
+            'redesSociales' => $redesSocialesModel,
+            'portfolioExists' => true,
+            'error' => $error
+        ];
 
         $this->renderHTML('../app/views/view_editarPortfolio.php', $data);
     }

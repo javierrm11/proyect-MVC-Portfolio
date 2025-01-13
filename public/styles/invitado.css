@@ -129,6 +129,15 @@ article p {
     font-size: 1rem;
     color: #555;
 }
+a{
+    color: #fff;
+    text-decoration: none;
+    background-color: #0078D7;
+    padding: 1vh 2vw;
+}
+a:hover{
+    background-color: #005BB5;
+}
 
 /* Responsividad */
 @media (max-width: 768px) {

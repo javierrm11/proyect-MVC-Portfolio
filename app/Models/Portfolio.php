@@ -15,6 +15,11 @@ class Portfolio extends DBAbstractModel
         }
         return self::$instancia;
     }
+
+    private $trabajo;
+    private $proyecto;
+    private $skill;
+    private $redes_sociales;
     public function setPortfolio($data)
     {
         // Guardar proyectos
@@ -97,6 +102,40 @@ class Portfolio extends DBAbstractModel
 
         return $portfolio;
     }
+    public function getPortfolioUser($usuarioId){
+        $portfolio = [];
+
+        // Obtener proyectos
+        $this->query = "SELECT * FROM proyectos WHERE usuarios_id = :usuarios_id AND visible = 1";
+        $this->parametros['usuarios_id'] = $usuarioId;
+        $this->get_results_from_query();
+        $portfolio['proyectos'] = $this->rows;
+
+        // Obtener trabajos
+        $this->query = "SELECT * FROM trabajos WHERE usuarios_id = :usuarios_id AND visible = 1";
+        $this->parametros['usuarios_id'] = $usuarioId;
+        $this->get_results_from_query();
+        $portfolio['trabajos'] = $this->rows;
+
+        // Obtener skills
+        $this->query = "SELECT * FROM skills WHERE usuarios_id = :usuarios_id AND visible = 1";
+        $this->parametros['usuarios_id'] = $usuarioId;
+        $this->get_results_from_query();
+        $portfolio['skills'] = $this->rows;
+
+        // Obtener redes sociales
+        $this->query = "SELECT * FROM redes_sociales WHERE usuarios_id = :usuarios_id";
+        $this->parametros['usuarios_id'] = $usuarioId;
+        $this->get_results_from_query();
+        $portfolio['redes_sociales'] = $this->rows;
+
+        $this->query = "SELECT * FROM usuarios WHERE id = :usuarios_id";
+        $this->parametros['usuarios_id'] = $usuarioId;
+        $this->get_results_from_query();
+        $portfolio['usuario'] = $this->rows;
+
+        return $portfolio;
+    }
     //funciones para obtener el id del usuario
     public function getUserTrabajo($id){
         $this->query = "SELECT usuarios_id FROM trabajos WHERE id = :id";
@@ -148,41 +187,26 @@ class Portfolio extends DBAbstractModel
         return $portfolio;
     }
     // funcion para editar el portfolio
-    public function editPortfolio($data)
+    public function editPortfolio($portfolio)
     {
-        // Editar proyectos
-        $this->query = "UPDATE proyectos SET titulo = :titulo, descripcion = :descripcion, tecnologias = :tecnologias WHERE usuarios_id = :usuarios_id";
-        $this->parametros['titulo'] = $data['tituloProyectos'];
-        $this->parametros['descripcion'] = $data['descripcionProyectos'];
-        $this->parametros['tecnologias'] = $data['tecnologiasProyectos'];
-        $this->parametros['usuarios_id'] = $data['usuarioId'];
-        $this->get_results_from_query();
-
-        // Editar trabajos
-        $this->query = "UPDATE trabajos SET titulo = :titulo, descripcion = :descripcion, fecha_inicio = :fecha_inicio, fecha_final = :fecha_final, logros = :logros WHERE usuarios_id = :usuarios_id";
-        $this->parametros['titulo'] = $data['tituloTrabajos'];
-        $this->parametros['descripcion'] = $data['descripcionTrabajos'];
-        $this->parametros['fecha_inicio'] = $data['fecha_inicioTrabajos'];
-        $this->parametros['fecha_final'] = $data['fecha_finTrabajos'];
-        $this->parametros['logros'] = $data['logrosTrabajos'];
-        $this->parametros['usuarios_id'] = $data['usuarioId'];
-        $this->get_results_from_query();
-
-        // Editar skills
-        $this->query = "UPDATE skills SET habilidades = :habilidades, categorias_skills_categoria = :categoria WHERE usuarios_id = :usuarios_id";
-        $this->parametros['habilidades'] = $data['habilidades'];
-        $this->parametros['categoria'] = $data['categoria'];
-        $this->parametros['usuarios_id'] = $data['usuarioId'];
-        $this->get_results_from_query();
-
-        // Editar redes sociales
-        $redesSociales = ['facebook', 'twitter', 'linkedin', 'github', 'instagram'];
-        foreach ($redesSociales as $red) {
-            $this->query = "UPDATE redes_sociales SET url = :url WHERE redes_socialescol = :redes_socialescol AND usuarios_id = :usuarios_id";
-            $this->parametros['redes_socialescol'] = $red;
-            $this->parametros['url'] = $data[$red];
-            $this->parametros['usuarios_id'] = $data['usuarioId'];
-            $this->get_results_from_query();
+        foreach ($portfolio as $tabla => $registros) {
+            foreach ($registros as $campos) {
+                $this->query = "UPDATE $tabla SET ";
+                $i = 0;
+                foreach ($campos as $campo => $valor) {
+                    if ($campo != 'id') {
+                        $this->query .= "$campo = :$campo";
+                        $this->parametros[$campo] = $valor;
+                        $i++;
+                        if ($i < count($campos) - 1) {
+                            $this->query .= ", ";
+                        }
+                    }
+                }
+                $this->query .= " WHERE id = :id";
+                $this->parametros['id'] = $campos['id'];
+                $this->get_results_from_query();
+            }
         }
     }
     // funcion para borrar el portfolio

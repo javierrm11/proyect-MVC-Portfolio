@@ -15,7 +15,7 @@ $data['portfolioExists'] = false;
 <body>
     <header>
         <div>
-            <a href="/">Nuevas Tecnologias</a>
+            <a href="/">PortfoliosHub</a>
         </div>
         <nav>
             <ul>

@@ -15,7 +15,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 <body>
     <header>
         <div>
-            <a href="/">Nuevas Tecnologias</a>
+            <a href="/">PortfoliosHub</a>
         </div>
         <nav>
             <ul>
