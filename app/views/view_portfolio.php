@@ -42,7 +42,7 @@
                     <h3>Trabajos</h3>
                     <?php
                     if (empty($data['trabajos'])) {
-                        echo "<p>No tienes trabajos visibles</p>";
+                        echo "<p>No tiene trabajos visibles</p>";
                     } else {
                         foreach ($data['trabajos'] as $trabajo) { ?>
                             <h4><?php echo $trabajo["titulo"] ?></h4>
@@ -57,7 +57,7 @@
                     <h3>Proyectos</h3>
                     <?php
                     if (empty($data['proyectos'])) {
-                        echo "<p>No tienes proyectos visibles</p>";
+                        echo "<p>No tiene proyectos visibles</p>";
                     } else {
                         foreach ($data['proyectos'] as $proyecto) { ?>
                             <h4><?php echo $proyecto["titulo"] ?></h4>
@@ -70,7 +70,7 @@
                     <h3>Skills</h3>
                     <?php
                     if (empty($data['skills'])) {
-                        echo "<p>No tienes skills visibles</p>";
+                        echo "<p>No tiene skills visibles</p>";
                     } else {
                         foreach ($data['skills'] as $skill) { ?>
                             <h4><?php echo $skill["habilidades"] ?></h4>

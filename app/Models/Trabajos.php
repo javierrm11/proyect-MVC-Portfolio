@@ -30,6 +30,7 @@ class Trabajos extends DBAbstractModel
     private $created_at;
     private $updated_at;
     private $usuarios_id;
+
     //gets y sets
     public function getId()
     {
@@ -111,8 +112,8 @@ class Trabajos extends DBAbstractModel
     {
         $this->usuarios_id = $usuarios_id;
     }
-
-
+    
+    // funcion para crear un nuevo trabajo en la base de datos
     public function setTrabajo(){
         $fecha = new \DateTime();
 
@@ -129,18 +130,22 @@ class Trabajos extends DBAbstractModel
         $this->get_results_from_query();
         $this->mensaje = "Trabajo agregado";
     }
+
+    // funcion para obtener el usuario que creo el trabajo
     public function getUserTrabajo($id){
-        $this->query = "SELECT * FROM trabajos WHERE usuarios_id = :id";
+        $this->query = "SELECT usuarios_id FROM trabajos WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows;
     }
+    // funcion para obtener los trabajos de un usuario
     public function getTrabajos($id){
         $this->query = "SELECT * FROM trabajos WHERE usuarios_id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows;
     }
+    // funcion para obtener un trabajo en especifico
     public function updateTrabajo($trabajoId, $titulo, $descripcion, $fecha_inicio, $fecha_fin, $logros){
         $fecha = new \DateTime();
         $this->query = "UPDATE trabajos SET titulo = :titulo, descripcion = :descripcion, fecha_inicio = :fecha_inicio, fecha_final = :fecha_final, logros = :logros, updated_at = :updated_at WHERE id = :id";
@@ -154,6 +159,13 @@ class Trabajos extends DBAbstractModel
         $this->get_results_from_query();
         $this->mensaje = "Trabajo actualizado";
     }
+    // funcion para eliminar un trabajo
+    public function deleteTrabajo($id){
+        $this->query = "DELETE FROM trabajos WHERE id = :id";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+        $this->mensaje = "Trabajo eliminado";
+    }
     public function get(){
 
     }
@@ -163,7 +175,5 @@ class Trabajos extends DBAbstractModel
     public function edit(){
 
     }
-    public function delete(){
-
-    }
+    public function delete(){}
 }

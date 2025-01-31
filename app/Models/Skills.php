@@ -101,8 +101,8 @@ class Skills extends DBAbstractModel
         $this->get_results_from_query();
         $this->mensaje = "Proyecto agregado";
     }
-    public function getUserProyecto($id){
-        $this->query = "SELECT * FROM proyectos WHERE usuarios_id = :id";
+    public function getUserSkill($id){
+        $this->query = "SELECT usuarios_id FROM skills WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows;
@@ -112,6 +112,12 @@ class Skills extends DBAbstractModel
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows;
+    }
+    public function deleteSkill($id){
+        $this->query = "DELETE FROM skills WHERE id = :id";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+        $this->mensaje = "Skill eliminado";
     }
     public function get(){
 

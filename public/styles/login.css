@@ -77,8 +77,8 @@ input[type="submit"]:hover {
 p {
     font-size: 0.9rem;
     color: #e74c3c; /* Rojo para los mensajes de error */
-    margin-top: -15px;
-    margin-bottom: 15px;
+
+    text-align: center;
 }
 
 input[type="submit"]:disabled {

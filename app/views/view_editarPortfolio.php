@@ -55,14 +55,15 @@
                     <div>
                         <label for="logrosTrabajos_<?php echo $trabajo['id']; ?>">Logros</label>
                         <input type="text" id="logrosTrabajos_<?php echo $trabajo['id']; ?>" name="logrosTrabajos_<?php echo $trabajo['id']; ?>" value="<?php echo htmlspecialchars($trabajo['logros']); ?>">
+                        <?php if ($trabajo['visible'] == 1): ?>
+                            <a href="/ocultarTrabajo/<?php echo $trabajo['id']; ?>" class="boton-accion">Ocultar</a>
+                        <?php else: ?>
+                            <a href="/mostrarTrabajo/<?php echo $trabajo['id']; ?>" class="boton-accion">Mostrar</a>
+                        <?php endif; ?>
+                        <a href="/eliminarTrabajo/<?php echo $trabajo['id']; ?>" class="boton-accion-eliminar">Eliminar</a>
                     </div>
-                    <?php if ($trabajo['visible'] == 1): ?>
-                        <a href="/ocultarTrabajo/<?php echo $trabajo['id']; ?>">Ocultar</a>
-                    <?php else: ?>
-                        <a href="/mostrarTrabajo/<?php echo $trabajo['id']; ?>">Mostrar</a>
-                    <?php endif; ?>
                 <?php endforeach; ?>
-                <a href="/addTrabajo/<?php echo $_SESSION['usuario']['id']; ?>">Añadir Trabajo</a>
+                <a href="/addTrabajo/<?php echo $_SESSION['usuario']['id']; ?>" class="anadir">Añadir Trabajo</a>
             </div>
             <div>
                 <h3>Proyectos</h3>
@@ -78,14 +79,15 @@
                     <div>
                         <label for="tecnologiasProyectos_<?php echo $proyecto['id']; ?>">Tecnologías</label>
                         <input type="text" id="tecnologiasProyectos_<?php echo $proyecto['id']; ?>" name="tecnologiasProyectos_<?php echo $proyecto['id']; ?>" value="<?php echo htmlspecialchars($proyecto['tecnologias']); ?>">
+                        <?php if ($proyecto['visible'] == 1): ?>
+                            <a href="/ocultarProyecto/<?php echo $proyecto['id']; ?>" class="boton-accion">Ocultar</a>
+                        <?php else: ?>
+                            <a href="/mostrarProyecto/<?php echo $proyecto['id']; ?>" class="boton-accion">Mostrar</a>
+                        <?php endif; ?>
+                        <a href="/eliminarProyecto/<?php echo $proyecto['id']; ?>" class="boton-accion-eliminar">Eliminar</a>
                     </div>
-                    <?php if ($proyecto['visible'] == 1): ?>
-                        <a href="/ocultarProyecto/<?php echo $proyecto['id']; ?>">Ocultar</a>
-                    <?php else: ?>
-                        <a href="/mostrarProyecto/<?php echo $proyecto['id']; ?>">Mostrar</a>
-                    <?php endif; ?>
                 <?php endforeach; ?>
-                <a href="/addProyecto/<?php echo $_SESSION['usuario']['id']; ?>">Añadir Proyecto</a>
+                <a href="/addProyecto/<?php echo $_SESSION['usuario']['id']; ?>" class="anadir">Añadir Proyecto</a>
             </div>
             <div>
                 <h3>Skills</h3>
@@ -97,14 +99,15 @@
                     <div>
                         <label for="categoria_<?php echo $skill['id']; ?>">Categoría</label>
                         <input type="text" id="categoria_<?php echo $skill['id']; ?>" name="categoria_<?php echo $skill['id']; ?>" value="<?php echo htmlspecialchars($skill['categorias_skills_categoria']); ?>">
+                        <?php if ($skill['visible'] == 1): ?>
+                            <a href="/ocultarSkill/<?php echo $skill['id']; ?>" class="boton-accion">Ocultar</a>
+                        <?php else: ?>
+                            <a href="/mostrarSkill/<?php echo $skill['id']; ?>" class="boton-accion">Mostrar</a>
+                        <?php endif; ?>
+                        <a href="/eliminarSkill/<?php echo $skill['id']; ?>" class="boton-accion-eliminar">Eliminar</a>
                     </div>
-                    <?php if ($skill['visible'] == 1): ?>
-                        <a href="/ocultarSkill/<?php echo $skill['id']; ?>">Ocultar</a>
-                    <?php else: ?>
-                        <a href="/mostrarSkill/<?php echo $skill['id']; ?>">Mostrar</a>
-                    <?php endif; ?>
                 <?php endforeach; ?>
-                <a href="/addSkill/<?php echo $_SESSION['usuario']['id']; ?>">Añadir Skills</a>
+                <a href="/addSkill/<?php echo $_SESSION['usuario']['id']; ?>" class="anadir">Añadir Skills</a>
             </div>
             <div>
                 <h3>Redes Sociales</h3>
@@ -112,8 +115,10 @@
                     <div>
                         <h4><?php echo htmlspecialchars($redes['redes_socialescol']); ?></h4>
                         <input type="text" name="redes_<?php echo $redes['id']; ?>" value="<?php echo htmlspecialchars($redes['url']); ?>">
+                        <a href="/eliminarRedSocial/<?php echo $redes['id']; ?>" class="boton-accion-eliminar">Eliminar</a>
                     </div>
                 <?php endforeach; ?>
+                <a href="/addRedSocial/<?php echo $_SESSION['usuario']['id']; ?>" class="anadir">Añadir Redes Sociales</a>
             </div>
             <p><?php echo $data['error'] ?></p>
             <input type="submit" name="guardar" value="Guardar">

@@ -139,13 +139,22 @@ class Usuario extends DBAbstractModel{
         return $this->mensaje;
     }
     public function getAll(){
-        $this->query = "SELECT * FROM usuarios where cuenta_activa = 1 AND visible = 1";
+        $this->query = "SELECT * FROM usuarios where cuenta_activa = 1";
         $this->get_results_from_query();
         if(count($this->rows) > 0){
             return $this->rows;
         }
         
     }
+    public function getAllVisible(){
+        $this->query = "SELECT * FROM usuarios where cuenta_activa = 1 and visible = 1";
+        $this->get_results_from_query();
+        if(count($this->rows) > 0){
+            return $this->rows;
+        }
+        
+    }
+    
 
     public function get($correo = ""){
         $this->query = "SELECT id FROM usuarios WHERE email = :email";
@@ -165,7 +174,6 @@ class Usuario extends DBAbstractModel{
     public function set(){
         $this->query = "INSERT INTO usuarios(nombre, apellidos, foto, categoria_profesional, email, resumen_perfil, password, visible, created_at, updated_at, token, fecha_creacion_token, cuenta_activa) VALUES(:nombre, :apellidos, :foto, :categoria_profesional, :email, :resumen_perfil, :password, :visible, :created_at, :updated_at, :token, :fecha_creacion_token, :cuenta_activa)";
         
-        //$this->parametros['id']= $id;
         $this->parametros['nombre']= $this->nombre;
         $this->parametros['apellidos']= $this->apellidos;
         $this->parametros['foto']= $this->foto;
@@ -219,7 +227,12 @@ class Usuario extends DBAbstractModel{
     }
     
     
-    public function delete(){}
+    public function delete(){
+        $this->query = "DELETE FROM usuarios WHERE id = :id";
+        $this->parametros['id'] = $this->id;
+        $this->get_results_from_query();
+        $this->mensaje = 'Usuario eliminado.';
+    }
     public function edit(){}
     public function editCuentaActiva(){
         $this->query = "UPDATE usuarios 

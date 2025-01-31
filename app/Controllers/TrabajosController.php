@@ -16,8 +16,7 @@ class TrabajosControllers extends BaseController
         $url = explode("/", $url);
         $id = $url[2];
         //validar si el usuario esta logeado
-        Trabajos::getInstancia()->getUserTrabajo($id);
-        if ($_SESSION["usuario"]["id"] != $id) {
+        if ($_SESSION["usuario"]["id"] != $id ) {
             header("Location: /");
             exit();
         }
@@ -57,6 +56,24 @@ class TrabajosControllers extends BaseController
             }
         }
         $this->renderHTML('../app/views/view_addTrabajo.php', $data);
+    }
+    public function deleteTrabajoAction(){
+        //obtener url
+        $url = $_SERVER["REQUEST_URI"];
+        $url = explode("/", $url);
+        $id = $url[2];
+        //validar si el usuario esta logeado
+        $idUser = Trabajos::getInstancia()->getUserTrabajo($id);
+        if ($_SESSION["usuario"]["id"] != $idUser[0]["usuarios_id"]) {
+            header("Location: /");
+            exit();
+        }
+        $url = $_SERVER["REQUEST_URI"];
+        $url = explode("/", $url);
+        $id = $url[2];
+        $trabajoObj = Trabajos::getInstancia();
+        $trabajoObj->deleteTrabajo($id);
+        header("Location: /user");
     }
 
 }

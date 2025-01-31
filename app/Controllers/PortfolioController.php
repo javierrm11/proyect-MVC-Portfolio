@@ -17,7 +17,7 @@ class PortfolioController extends BaseController
     public function index()
     {
         if (!isset($_SESSION['usuario'])) {
-            header('Location: view_login.php');
+            header('Location: ./login');
             exit();
         }
 
@@ -42,7 +42,7 @@ class PortfolioController extends BaseController
         $portfolioModel = Portfolio::getInstancia();
         $data = $portfolioModel->getPortfolioUser($id);
         $data['portfolioExists'] = true;
-        if($data['proyectos'] == null || $data['trabajos'] == null || $data['skills'] == null || $data['redes_sociales'] == null){
+        if($data['proyectos'] == null && $data['trabajos'] == null && $data['skills'] == null && $data['redes_sociales'] == null){
             $data['portfolioExists'] = false;
         }
         $this->renderHTML('../app/views/view_portfolio.php', $data);
@@ -51,7 +51,7 @@ class PortfolioController extends BaseController
     public function create()
     {
         if (!isset($_SESSION['usuario'])) {
-            header('Location: view_login.php');
+            header('Location: ./login');
             exit();
         }
 
@@ -186,6 +186,10 @@ class PortfolioController extends BaseController
     }
     public function edit()
     {
+        if(!isset($_SESSION['usuario'])){
+            header('Location: ./login');
+            exit();
+        }
         $usuarioId = $_SESSION['usuario']['id'];
         $error = "";
         $portfolioModel = Portfolio::getInstancia();

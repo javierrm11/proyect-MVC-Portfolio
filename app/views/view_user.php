@@ -35,12 +35,12 @@
             <ul>
                 <?php
                 if ($data['portfolioExists']) {
-                    echo "<li><a href='./editar'>Editar</a></li>";
-                    if($_SESSION['usuario']['visible'] == 1){
+                    if ($_SESSION['usuario']['visible'] == 1) {
                         echo "<li><a href='./ocultarUsuario'>Ocultar usuario</a></li>";
-                    }else{
+                    } else {
                         echo "<li><a href='./mostrarUsuario'>Mostrar usuario</a></li>";
                     }
+                    echo "<li><a href='./editar'>Editar</a></li>";
                     echo "<li><a href='./borrar'>Borrar</a></li>";
                 } else {
                     echo "<li><a href='./crearPortfolio'>Crear</a></li>";
@@ -107,6 +107,9 @@
                 echo "<p>No tienes un portfolio creado</p>";
             }
             ?>
+            <div class="button-container">
+                <a href="./borrarUsuario" class="button">Borrar Cuenta</a>
+            </div>
         </article>
     </main>
 </body>

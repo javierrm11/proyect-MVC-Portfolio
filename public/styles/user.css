@@ -58,6 +58,7 @@ article {
     border-radius: 8px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     margin-top: 30px;
+    position: relative;
 }
 
 h2 {
@@ -108,6 +109,24 @@ ul li p {
     color: #555;
 }
 
+/* Button Alignment */
+article a {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #e74c3c;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+}
+article a:hover {
+    background-color: #c0392b;
+}
+
 /* Visibility for empty states */
 p {
     color: #e74c3c; /* Red color for empty or error messages */
@@ -143,5 +162,12 @@ p {
 
     nav ul li {
         margin-bottom: 10px;
+    }
+
+    article a {
+        position: static;
+        display: block;
+        margin: 20px auto 0;
+        text-align: center;
     }
 }

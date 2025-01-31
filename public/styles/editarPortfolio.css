@@ -132,6 +132,51 @@ main a {
 a:hover {
     color: #2a5d84;
 }
+.boton-accion{
+    background-color: #4a90e2;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    padding: 10px;
+}
+.anadir{
+    display: block;
+    width: fit-content;
+    background-color: #2a5d84;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    padding: 10px;
+    margin-top: 10px;
+}
+.boton-accion-eliminar{
+    background-color: #ff0000;
+    border: none;
+    color: white;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    padding: 10px;
+}
+.boton-accion:hover{
+    color: #fff;
+    background-color: #357ab7;
+}
+.anadir:hover{
+    background-color: #2a5d84;
+    color: #fff;
+}
+.boton-accion-eliminar:hover{
+    background-color: #ff3333;
+    color: #fff;
+}
 
 /* Styling for each section of the portfolio */
 div h3 {

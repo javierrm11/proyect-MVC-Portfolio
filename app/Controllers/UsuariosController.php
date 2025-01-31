@@ -7,6 +7,7 @@ session_start();
 use App\Models\Usuario;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use App\Models\Portfolio;
 // Importar las clases necesarias
 require_once 'BaseController.php';
 require_once __DIR__ . '/../Models/Usuario.php';
@@ -20,14 +21,18 @@ class UsuariosController extends BaseController
         $usuario = Usuario::getInstancia();
 
         // Almacenamos los datos en $data
-        $data['usuarios'] = $usuario->getAll();
+        $data['usuarios'] = $usuario->getAllVisible();
 
         // Llamamos a la función renderHTML
         $this->renderHTML('../app/views/index_view.php', $data);
     }
 
     public function AddAction()
-    {
+    {  
+        // Si hay sesión iniciada, redirigir a inicio
+        if(isset($_SESSION['usuario'])){
+            header('Location: ./');
+        }
         // Variables para los campos del formulario
         $data = [
             'nombre' => '',
@@ -153,7 +158,8 @@ class UsuariosController extends BaseController
                 } catch (Exception $e) {
                     echo "El mensaje no pudo ser enviado. Error de correo: {$mail->ErrorInfo}";
                 }
-
+                $mensaje = "Verifica su correo electronico para verificar su cuenta";
+                $_SESSION['mensaje'] = $mensaje;
                 // Redirigir a la página de login
                 header('Location: ./login');
             }
@@ -165,6 +171,10 @@ class UsuariosController extends BaseController
 
     public function LoginAction()
     {
+        // Si hay sesión iniciada, redirigir a inicio
+        if(isset($_SESSION['usuario'])){
+            header('Location: ./');
+        }
         $email = $password = '';
         $eEmail = $ePassword = $eCredenciales = '';
         $error = false;
@@ -188,7 +198,7 @@ class UsuariosController extends BaseController
                     // Comprobar si el email y la contraseña son correctos
                     if ($usuario['email'] === $email && $usuario['password'] === $password) {
                         $_SESSION['usuario'] = $usuario;
-                        header("Location: ./user");
+                        header("Location: ./");
                         exit;
                     } else {
                         $eCredenciales = 'Las credenciales no son correctas';
@@ -224,6 +234,8 @@ class UsuariosController extends BaseController
                     $usuario->setId($user[0]['id']);
                     $usuario->editCuentaActiva();
                     $mensaje = "Cuenta activada con éxito.";
+                    $_SESSION['mensaje'] = $mensaje;
+                    header('Location: ./login');
                 } else {
                     $mensaje = "El token ha expirado.";
                 }
@@ -233,8 +245,6 @@ class UsuariosController extends BaseController
         } else {
             $mensaje = "Token no proporcionado.";
         }
-
-        $this->renderHTML('../app/views/view_activar.php', ['mensaje' => $mensaje]);
     }
     public function buscar()
     {
@@ -269,6 +279,23 @@ class UsuariosController extends BaseController
     }
     public function LogoutAction()
     {
+        session_destroy();
+        header('Location: ./');
+    }
+    public function BorrarUsuarioAction()
+    {
+        if (!isset($_SESSION['usuario'])) {
+            header('Location: ./');
+        }
+        if($portfolios = Portfolio::getInstancia()->getPortfolioUser($_SESSION['usuario']['id'])){
+            foreach ($portfolios as $portfolio) {
+                $portfolio = Portfolio::getInstancia();
+                $portfolio->deletePortfolio($_SESSION['usuario']['id']);
+            }
+        }
+        $usuario = Usuario::getInstancia();
+        $usuario->setId($_SESSION['usuario']['id']);
+        $usuario->delete();
         session_destroy();
         header('Location: ./');
     }

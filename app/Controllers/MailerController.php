@@ -17,7 +17,7 @@ class MailerService
     public function sendActivationEmail($recipientEmail, $activationLink)
     {
         $email = (new Email())
-            ->from('your_email@gmail.com') // Correo del remitente
+            ->from('javierrumo2@gmail.com') // Correo del remitente
             ->to($recipientEmail) // Correo del destinatario
             ->subject('Activación de tu cuenta')
             ->text("Haz clic en el siguiente enlace para activar tu cuenta: $activationLink")

@@ -71,6 +71,12 @@ class RedesSociales extends DBAbstractModel
     {
         $this->usuarios_id = $usuarios_id;
     }
+    public function getUserRedSocial($id){
+        $this->query = "SELECT usuarios_id FROM redes_sociales WHERE id = :id";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+        return $this->rows;
+    }
     public function getRedesSociales($id){
         $this->query = "SELECT * FROM redes_sociales WHERE usuarios_id = :id";
         $this->parametros['id'] = $id;
@@ -79,6 +85,21 @@ class RedesSociales extends DBAbstractModel
     }
     public function get(){}
     public function set(){}
+    public function setRedSocial()
+    {
+        $this->query = "INSERT INTO redes_sociales (redes_socialescol, url, created_at, updated_at, usuarios_id) VALUES (:redes_socialescol, :url, :created_at, :updated_at, :usuarios_id)";
+        $this->parametros['redes_socialescol'] = $this->redes_socialescol;
+        $this->parametros['url'] = $this->url;
+        $this->parametros['created_at'] = $this->created_at;
+        $this->parametros['updated_at'] = $this->updated_at;
+        $this->parametros['usuarios_id'] = $this->usuarios_id;
+        $this->get_results_from_query();
+    }
+    public function deleteRedSocial(){
+        $this->query = "DELETE FROM redes_sociales WHERE id = :id";
+        $this->parametros['id'] = $this->id;
+        $this->get_results_from_query();
+    }
 
     public function edit(){}
     public function delete(){}

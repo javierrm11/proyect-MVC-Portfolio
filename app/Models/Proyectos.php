@@ -110,7 +110,7 @@ class Proyectos extends DBAbstractModel
         $this->mensaje = "Proyecto agregado";
     }
     public function getUserProyecto($id){
-        $this->query = "SELECT * FROM proyectos WHERE usuarios_id = :id";
+        $this->query = "SELECT usuarios_id FROM proyectos WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows;
@@ -120,6 +120,12 @@ class Proyectos extends DBAbstractModel
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows;
+    }
+    public function deleteProyecto($id){
+        $this->query = "DELETE FROM proyectos WHERE id = :id";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+        $this->mensaje = "Proyecto eliminado";
     }
     public function get(){}
     public function set(){

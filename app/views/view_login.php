@@ -33,6 +33,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
             </ul>
     </header>
     <h1>Iniciar Sesión</h1>
+    <p><?php echo $_SESSION['mensaje'] ??  "" ?></p>
     <form action="" method="post">
         <label for="email">Email</label>
         <input type="email" name="email" id="email" value="<?php echo $data['email']; ?>">

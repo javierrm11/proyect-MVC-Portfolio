@@ -16,7 +16,7 @@ class SkillsController extends BaseController
         $url = explode("/", $url);
         $id = $url[2];
         //validar si el usuario esta logeado
-        Skills::getInstancia()->getUserProyecto($id);
+        Skills::getInstancia()->getUserSkill($id);
         if ($_SESSION["usuario"]["id"] != $id) {
             header("Location: /");
             exit();
@@ -51,6 +51,24 @@ class SkillsController extends BaseController
             }
         }
         $this->renderHTML('../app/views/view_addSkill.php', $data);
+    }
+    public function deleteSkillAction(){
+        //obtener url
+        $url = $_SERVER["REQUEST_URI"];
+        $url = explode("/", $url);
+        $id = $url[2];
+        //validar si el usuario esta logeado
+        $idUser = Skills::getInstancia()->getUserSkill($id);
+        if ($_SESSION["usuario"]["id"] != $idUser[0]["usuarios_id"]) {
+            header("Location: /");
+            exit();
+        }
+        $url = $_SERVER["REQUEST_URI"];
+        $url = explode("/", $url);
+        $id = $url[2];
+        $trabajoObj = Skills::getInstancia();
+        $trabajoObj->deleteSkill($id);
+        header("Location: /user");
     }
 
 }
