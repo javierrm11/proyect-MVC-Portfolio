@@ -105,7 +105,7 @@ class Skills extends DBAbstractModel
         $this->query = "SELECT usuarios_id FROM skills WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
-        return $this->rows;
+        return $this->rows[0]['usuarios_id'];
     }
     public function getSkills($id){
         $this->query = "SELECT * FROM skills WHERE usuarios_id = :id";
@@ -118,6 +118,19 @@ class Skills extends DBAbstractModel
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         $this->mensaje = "Skill eliminado";
+    }
+    public function mostrarSkill($id)
+    {
+        $this->query = "UPDATE skills SET visible = 1 WHERE id = :id";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+    }
+
+    public function ocultarSkill($id)
+    {
+        $this->query = "UPDATE skills SET visible = 0 WHERE id = :id";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();   
     }
     public function get(){
 

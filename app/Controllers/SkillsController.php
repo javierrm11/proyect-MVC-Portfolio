@@ -70,5 +70,41 @@ class SkillsController extends BaseController
         $trabajoObj->deleteSkill($id);
         header("Location: /user");
     }
+    public function mostrarSkillAction()
+    {
+        $skillsModel = Skills::getInstancia();
+        // obtenemos la uri
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
+        $idUser = $skillsModel->getUserSkill($id);
+        // comprobamos si el usuario es el propietario del proyecto
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            header('Location: ../');
+            exit();
+        }
+
+        $skillsModel->mostrarSkill($id); // mostramos el skill
+        // redirigimos a la vista de editar
+        $_SESSION['mensaje'] = "Skill mostrado con éxito.";
+        header('Location: ../editar');
+    }
+    public function ocultarSkillAction()
+    {
+        $skillsModel = Skills::getInstancia();
+        // obtenemos la uri
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
+        $idUser = $skillsModel->getUserSkill($id);
+        // comprobamos si el usuario es el propietario del proyecto
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            header('Location: ../');
+            exit();
+        }
+
+        $skillsModel->ocultarSkill($id); // ocultamos el skill
+        // redirigimos a la vista de editar
+        $_SESSION['mensaje'] = "Skill ocultado con éxito.";
+        header('Location: ../editar');
+    }
 
 }

@@ -137,18 +137,6 @@ class Portfolio extends DBAbstractModel
         return $portfolio;
     }
     //funciones para obtener el id del usuario
-    public function getUserTrabajo($id){
-        $this->query = "SELECT usuarios_id FROM trabajos WHERE id = :id";
-        $this->parametros['id'] = $id;
-        $this->get_results_from_query();
-        return $this->rows[0]['usuarios_id'];
-    }
-    public function getUserProyecto($id){
-        $this->query = "SELECT usuarios_id FROM proyectos WHERE id = :id";
-        $this->parametros['id'] = $id;
-        $this->get_results_from_query();
-        return $this->rows[0]['usuarios_id'];
-    }
     public function getUserSkill($id){
         $this->query = "SELECT usuarios_id FROM skills WHERE id = :id";
         $this->parametros['id'] = $id;
@@ -231,21 +219,6 @@ class Portfolio extends DBAbstractModel
         $this->query = "DELETE FROM redes_sociales WHERE usuarios_id = :usuarios_id";
         $this->parametros['usuarios_id'] = $usuarioId;
         $this->get_results_from_query();
-    }
-    //funciones para mostrar y ocultar los trabajos, proyectos y skills
-    
-    public function mostrarSkill($id)
-    {
-        $this->query = "UPDATE skills SET visible = 1 WHERE id = :id";
-        $this->parametros['id'] = $id;
-        $this->get_results_from_query();
-    }
-
-    public function ocultarSkill($id)
-    {
-        $this->query = "UPDATE skills SET visible = 0 WHERE id = :id";
-        $this->parametros['id'] = $id;
-        $this->get_results_from_query();   
     }
 
     public function get(){}

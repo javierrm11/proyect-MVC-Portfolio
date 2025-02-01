@@ -155,12 +155,12 @@ $router->add([
 $router->add([
     'name' => 'mostrarSkill',
     'path' => '/^\/mostrarSkill\/(\d+)$/',
-    'action' => [PortfolioController::class, 'mostrarSkillAction']
+    'action' => [SkillsController::class, 'mostrarSkillAction']
 ]);
 $router->add([
     'name' => 'ocultarSkill',
     'path' => '/^\/ocultarSkill\/(\d+)$/',
-    'action' => [PortfolioController::class, 'ocultarSkillAction']
+    'action' => [SkillsController::class, 'ocultarSkillAction']
 ]);
 
 // rutas de redes sociales

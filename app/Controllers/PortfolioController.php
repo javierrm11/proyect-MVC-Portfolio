@@ -329,41 +329,6 @@ class PortfolioController extends BaseController
     }
     
     // Skills
-    public function mostrarSkillAction()
-    {
-        $portfolioModel = Portfolio::getInstancia();
-        // obtenemos la uri
-        $uri = $_SERVER['REQUEST_URI'];
-        $id = explode('/', $uri)[2];
-        $idUser = $portfolioModel->getUserSkill($id);
-        // comprobamos si el usuario es el propietario del proyecto
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
-            header('Location: ../');
-            exit();
-        }
-
-        $portfolioModel->mostrarSkill($id); // mostramos el skill
-        // redirigimos a la vista de editar
-        $_SESSION['mensaje'] = "Skill mostrado con éxito.";
-        header('Location: ../editar');
-    }
-    public function ocultarSkillAction()
-    {
-        $portfolioModel = Portfolio::getInstancia();
-        // obtenemos la uri
-        $uri = $_SERVER['REQUEST_URI'];
-        $id = explode('/', $uri)[2];
-        $idUser = $portfolioModel->getUserSkill($id);
-        // comprobamos si el usuario es el propietario del proyecto
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
-            header('Location: ../');
-            exit();
-        }
-
-        $portfolioModel->ocultarSkill($id); // ocultamos el skill
-        // redirigimos a la vista de editar
-        $_SESSION['mensaje'] = "Skill ocultado con éxito.";
-        header('Location: ../editar');
-    }
+    
 
 }
