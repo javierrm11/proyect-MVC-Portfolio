@@ -46,12 +46,6 @@ class Portfolio extends DBAbstractModel
         $proyectoModel->setUsuariosId($data['usuarioId']);
         $proyectoModel->set();
 
-        $categoriaModel = CategoriasSkill::getInstancia();
-        $isExist = $categoriaModel->getCategoria($data['categoria']);
-        if (!$isExist) {
-            $categoriaModel->setCategoria($data['categoria']);
-            $categoriaModel->set();
-        }
         // Guardar skills
         $skillModel = Skills::getInstancia();
         $skillModel->setHabilidades($data['habilidades']);
@@ -73,70 +67,28 @@ class Portfolio extends DBAbstractModel
         }
     }
 
-    public function getPortfolio($usuarioId)
+    public function get($usuarioId = null)
     {
         $portfolio = [];
 
-        // Obtener proyectos
-        $this->query = "SELECT * FROM proyectos WHERE usuarios_id = :usuarios_id AND visible = 1";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
-        $portfolio['proyectos'] = $this->rows;
-
         // Obtener trabajos
-        $this->query = "SELECT * FROM trabajos WHERE usuarios_id = :usuarios_id AND visible = 1";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
-        $portfolio['trabajos'] = $this->rows;
-
-        // Obtener skills
-        $this->query = "SELECT * FROM skills WHERE usuarios_id = :usuarios_id AND visible = 1";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
-        $portfolio['skills'] = $this->rows;
-
-        // Obtener redes sociales
-        $this->query = "SELECT * FROM redes_sociales WHERE usuarios_id = :usuarios_id";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
-        $portfolio['redes_sociales'] = $this->rows;
-
-        return $portfolio;
-    }
-    public function get($usuarioId = null){
-        $portfolio = [];
+        $trabajoModel = Trabajos::getInstancia();
+        $portfolio["trabajos"] = $trabajoModel->getTrabajos($usuarioId);
 
         // Obtener proyectos
-        $this->query = "SELECT * FROM proyectos WHERE usuarios_id = :usuarios_id AND visible = 1";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
-        $portfolio['proyectos'] = $this->rows;
-
-        // Obtener trabajos
-        $this->query = "SELECT * FROM trabajos WHERE usuarios_id = :usuarios_id AND visible = 1";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
-        $portfolio['trabajos'] = $this->rows;
+        $proyectoModel = Proyectos::getInstancia();
+        $portfolio["proyectos"] = $proyectoModel->getProyectos($usuarioId);
 
         // Obtener skills
-        $this->query = "SELECT * FROM skills WHERE usuarios_id = :usuarios_id AND visible = 1";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
-        $portfolio['skills'] = $this->rows;
+        $skillModel = Skills::getInstancia();
+        $portfolio["skills"] = $skillModel->getSkills($usuarioId);
 
         // Obtener redes sociales
-        $this->query = "SELECT * FROM redes_sociales WHERE usuarios_id = :usuarios_id";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
-        $portfolio['redes_sociales'] = $this->rows;
-
-        $this->query = "SELECT * FROM usuarios WHERE id = :usuarios_id";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
-        $portfolio['usuario'] = $this->rows;
-
+        $redesSocialesModel = RedesSociales::getInstancia();
+        $portfolio["redes_sociales"] = $redesSocialesModel->getRedesSociales($usuarioId);
         return $portfolio;
     }
+    
     // funcion para obtener todos los datos del portfolio
     public function getPortfolioAll($usuarioId)
     {
@@ -171,25 +123,30 @@ class Portfolio extends DBAbstractModel
     // funcion para editar el portfolio
     public function edit($portfolio = [])
     {
-        foreach ($portfolio as $tabla => $registros) {
-            foreach ($registros as $campos) {
-                $this->query = "UPDATE $tabla SET ";
-                $i = 0;
-                foreach ($campos as $campo => $valor) {
-                    if ($campo != 'id') {
-                        $this->query .= "$campo = :$campo";
-                        $this->parametros[$campo] = $valor;
-                        $i++;
-                        if ($i < count($campos) - 1) {
-                            $this->query .= ", ";
-                        }
-                    }
-                }
-                $this->query .= " WHERE id = :id";
-                $this->parametros['id'] = $campos['id'];
-                $this->get_results_from_query();
-            }
+        foreach ($portfolio["trabajos"] as $registros) {
+            $trabajoModel = Trabajos::getInstancia();
+            $trabajoModel->edit($registros["id"], $registros["titulo"], $registros["descripcion"], $registros["fecha_inicio"], $registros["fecha_final"], $registros["logros"]);
         }
+        foreach ($portfolio["proyectos"] as $registros) {
+            $proyectoModel = Proyectos::getInstancia();
+            $proyectoModel->edit($registros["id"], $registros["titulo"], $registros["descripcion"], $registros["tecnologias"]);
+        }
+        foreach ($portfolio["skills"] as $registros) {
+            $categoriaModel = CategoriasSkill::getInstancia();
+            $isExist = $categoriaModel->getCategoria($registros["categorias_skills_categoria"]);
+            if (!$isExist) {
+                $categoriaModel->setCategoria($registros["categorias_skills_categoria"]);
+                $categoriaModel->set();
+            }
+
+            $skillModel = Skills::getInstancia();
+            $skillModel->edit($registros["id"], $registros["habilidades"], $registros["categorias_skills_categoria"]);
+        }
+        foreach ($portfolio["redes_sociales"] as $registros) {
+            $redesSocialesModel = RedesSociales::getInstancia();
+            $redesSocialesModel->edit($registros["id"], $registros["redes_socialescol"], $registros["url"]);
+        }
+            
     }
     // funcion para borrar el portfolio
     public function delete($usuarioId = null)

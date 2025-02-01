@@ -152,9 +152,16 @@ class Usuario extends DBAbstractModel{
         if(count($this->rows) > 0){
             return $this->rows;
         }
-        
     }
     
+    public function getUser($id){
+        $this->query = "SELECT * FROM usuarios where id = :id";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+        if(count($this->rows) > 0){
+            return $this->rows;
+        }
+    }
 
     public function get($correo = ""){
         $this->query = "SELECT id FROM usuarios WHERE email = :email";

@@ -89,6 +89,12 @@ class Skills extends DBAbstractModel
 
 
     public function set(){
+        $categoriaModel = CategoriasSkill::getInstancia();
+        $isExist = $categoriaModel->getCategoria($this->categorias_skills_categoria);
+        if (!$isExist) {
+            $categoriaModel->setCategoria($this->categorias_skills_categoria);
+            $categoriaModel->set();
+        }
         $fecha = new \DateTime();
 
         $this->query = "INSERT INTO skills (habilidades, categorias_skills_categoria, visible, created_at, updated_at, usuarios_id) VALUES (:habilidades, :categorias_skills_categoria, :visible, :created_at, :updated_at, :usuarios_id)";

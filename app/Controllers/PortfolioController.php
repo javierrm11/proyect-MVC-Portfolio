@@ -8,6 +8,7 @@ use App\Models\Proyectos;
 use App\Models\Trabajos;
 use App\Models\Skills;
 use App\Models\CategoriasSkills;
+use App\Models\Usuario;
 
 require_once 'BaseController.php';
 require_once __DIR__ . '/../Models/Portfolio.php';
@@ -26,10 +27,13 @@ class PortfolioController extends BaseController
         $usuarioId = $_SESSION['usuario']['id'];
         $portfolioModel = Portfolio::getInstancia();
 
-        $portfolio = $portfolioModel->getPortfolio($usuarioId);
-
+        $portfolio = $portfolioModel->get($usuarioId);
+        $portfolioExist = true;
+        if($portfolio['proyectos'] == null && $portfolio['trabajos'] == null && $portfolio['skills'] == null && $portfolio['redes_sociales'] == null){
+            $portfolioExist = false;
+        }
         $data = [
-            'portfolioExists' => !empty($portfolio['redes_sociales']),
+            'portfolioExists' => $portfolioExist,
             'trabajos' => $portfolio['trabajos'],
             'proyectos' => $portfolio['proyectos'],
             'skills' => $portfolio['skills'],
@@ -44,6 +48,7 @@ class PortfolioController extends BaseController
         $id = explode('/', $uri)[2];
         $portfolioModel = Portfolio::getInstancia();
         $data = $portfolioModel->get($id);
+        $data["usuario"] = Usuario::getInstancia()->getUser($id);
         $data['portfolioExists'] = true;
         if($data['proyectos'] == null && $data['trabajos'] == null && $data['skills'] == null && $data['redes_sociales'] == null){
             $data['portfolioExists'] = false;
@@ -197,15 +202,13 @@ class PortfolioController extends BaseController
         $usuarioId = $_SESSION['usuario']['id'];
         $error = "";
         $portfolioModel = Portfolio::getInstancia();
+        
         $portfolio = [];
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: ./login');
-            exit();
-        }
-        $trabajosModel = Trabajos::getInstancia()->getTrabajos($_SESSION['usuario']['id']);
-        $proyectosModel = Proyectos::getInstancia()->getProyectos($_SESSION['usuario']['id']);
-        $skillsModel = Skills::getInstancia()->getSkills($_SESSION['usuario']['id']);
-        $redesSocialesModel = RedesSociales::getInstancia()->getRedesSociales($_SESSION['usuario']['id']);
+        // Obtenemos los datos del portfolio
+        $trabajosModel = Trabajos::getInstancia()->getTrabajos($usuarioId);
+        $proyectosModel = Proyectos::getInstancia()->getProyectos($usuarioId);
+        $skillsModel = Skills::getInstancia()->getSkills($usuarioId);
+        $redesSocialesModel = RedesSociales::getInstancia()->getRedesSociales($usuarioId);
         if(isset($_POST["guardar"])){
             foreach ($trabajosModel as $trabajo) {
                 $trabajoId = $trabajo['id'];
@@ -293,14 +296,16 @@ class PortfolioController extends BaseController
                     $redSocialUrl = $_POST["redes_$redSocialId"];
                     $redSocial = [
                         'id' => $redSocialId,
+                        "redes_socialescol" => $redSocial['redes_socialescol'],
                         'url' => $redSocialUrl
                     ];
                     $portfolio['redes_sociales'][] = $redSocial;
                 }
                 
                 $portfolioModel->edit($portfolio);
+                header("Location: ./user");
                 $_SESSION['mensaje'] = "Portfolio actualizado con éxito.";
-                header("Location: ../user");
+                
             }
         }
         $data = [

@@ -99,5 +99,11 @@ class RedesSociales extends DBAbstractModel
         $this->get_results_from_query();
     }
 
-    public function edit(){}
+    public function edit($id = "", $redes_socialescol = "", $url = ""){
+        $this->query = "UPDATE redes_sociales SET redes_socialescol = :redes_socialescol, url = :url WHERE id = :id";
+        $this->parametros['redes_socialescol'] = $redes_socialescol;
+        $this->parametros['url'] = $url;
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+    }
 }
