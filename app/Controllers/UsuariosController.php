@@ -266,10 +266,10 @@ class UsuariosController extends BaseController
         if (!isset($_SESSION['usuario'])) {
             header('Location: ./');
         }
-        if($portfolios = Portfolio::getInstancia()->getPortfolioUser($_SESSION['usuario']['id'])){
+        if($portfolios = Portfolio::getInstancia()->get($_SESSION['usuario']['id'])){
             foreach ($portfolios as $portfolio) {
                 $portfolio = Portfolio::getInstancia();
-                $portfolio->deletePortfolio($_SESSION['usuario']['id']);
+                $portfolio->delete($_SESSION['usuario']['id']);
             }
         }
         $usuario = Usuario::getInstancia();

@@ -52,7 +52,7 @@ class TrabajosControllers extends BaseController
                 $trabajoObj->setCreatedAt($created_at);
                 $trabajoObj->setUpdatedAt($updated_at);
                 $trabajoObj->setUsuariosId($usuarios_id);
-                $trabajoObj->setTrabajo();
+                $trabajoObj->set();
             }
         }
         $this->renderHTML('../app/views/view_addTrabajo.php', $data);
@@ -63,7 +63,7 @@ class TrabajosControllers extends BaseController
         $url = explode("/", $url);
         $id = $url[2];
         //validar si el usuario esta logeado
-        $idUser = Trabajos::getInstancia()->getUserTrabajo($id);
+        $idUser = Trabajos::getInstancia()->get($id);
         if ($_SESSION["usuario"]["id"] != $idUser) {
             header("Location: /");
             exit();
@@ -72,7 +72,7 @@ class TrabajosControllers extends BaseController
         $url = explode("/", $url);
         $id = $url[2];
         $trabajoObj = Trabajos::getInstancia();
-        $trabajoObj->deleteTrabajo($id);
+        $trabajoObj->delete($id);
         header("Location: /user");
     }
     
@@ -82,7 +82,7 @@ class TrabajosControllers extends BaseController
         // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
-        $idUser = $trabajoModel->getUserTrabajo($id);
+        $idUser = $trabajoModel->get($id);
         // comprobamos si el usuario es el propietario del trabajo
         if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
             var_dump($idUser);
@@ -102,7 +102,7 @@ class TrabajosControllers extends BaseController
         // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
-        $idUser = $trabajoModel->getUserTrabajo($id);
+        $idUser = $trabajoModel->get($id);
         // comprobamos si el usuario es el propietario del trabajo
         if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
             header('Location: ../');

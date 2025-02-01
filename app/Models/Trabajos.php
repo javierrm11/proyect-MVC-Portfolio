@@ -114,7 +114,7 @@ class Trabajos extends DBAbstractModel
     }
     
     // funcion para crear un nuevo trabajo en la base de datos
-    public function setTrabajo(){
+    public function set(){
         $fecha = new \DateTime();
 
         $this->query = "INSERT INTO trabajos (titulo, descripcion, fecha_inicio, fecha_final, logros, visible, created_at, updated_at, usuarios_id) VALUES (:titulo, :descripcion, :fecha_inicio, :fecha_final, :logros, :visible, :created_at, :updated_at, :usuarios_id)";
@@ -132,7 +132,7 @@ class Trabajos extends DBAbstractModel
     }
 
     // funcion para obtener el usuario que creo el trabajo
-    public function getUserTrabajo($id){
+    public function get($id = ''){
         $this->query = "SELECT usuarios_id FROM trabajos WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
@@ -146,7 +146,7 @@ class Trabajos extends DBAbstractModel
         return $this->rows;
     }
     // funcion para obtener un trabajo en especifico
-    public function updateTrabajo($trabajoId, $titulo, $descripcion, $fecha_inicio, $fecha_fin, $logros){
+    public function edit($trabajoId = "", $titulo = "", $descripcion = "", $fecha_inicio = "", $fecha_fin = "", $logros = ''){
         $fecha = new \DateTime();
         $this->query = "UPDATE trabajos SET titulo = :titulo, descripcion = :descripcion, fecha_inicio = :fecha_inicio, fecha_final = :fecha_final, logros = :logros, updated_at = :updated_at WHERE id = :id";
         $this->parametros['titulo'] = $titulo;
@@ -160,7 +160,7 @@ class Trabajos extends DBAbstractModel
         $this->mensaje = "Trabajo actualizado";
     }
     // funcion para eliminar un trabajo
-    public function deleteTrabajo($id){
+    public function delete($id = ""){
         $this->query = "DELETE FROM trabajos WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
@@ -179,14 +179,4 @@ class Trabajos extends DBAbstractModel
         $this->parametros['id'] = $id;
         $this->get_results_from_query(); 
     }
-    public function get(){
-
-    }
-    public function set(){
-
-    }
-    public function edit(){
-
-    }
-    public function delete(){}
 }
