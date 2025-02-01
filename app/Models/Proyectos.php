@@ -113,7 +113,7 @@ class Proyectos extends DBAbstractModel
         $this->query = "SELECT usuarios_id FROM proyectos WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
-        return $this->rows;
+        return $this->rows[0]['usuarios_id'];
     }
     public function getProyectos($id){
         $this->query = "SELECT * FROM proyectos WHERE usuarios_id = :id";
@@ -126,6 +126,20 @@ class Proyectos extends DBAbstractModel
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         $this->mensaje = "Proyecto eliminado";
+    }
+    
+    public function mostrarProyecto($id)
+    {
+        $this->query = "UPDATE proyectos SET visible = 1 WHERE id = :id";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+    }
+
+    public function ocultarProyecto($id)
+    {
+        $this->query = "UPDATE proyectos SET visible = 0 WHERE id = :id";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();  
     }
     public function get(){}
     public function set(){

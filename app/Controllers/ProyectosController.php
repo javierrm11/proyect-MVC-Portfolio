@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Proyectos;
+use App\Models\Trabajos;
 
 require_once 'BaseController.php';
 require_once __DIR__ . '/../Models/Proyectos.php';
@@ -70,6 +71,43 @@ class ProyectosControllers extends BaseController
         $trabajoObj = Proyectos::getInstancia();
         $trabajoObj->deleteProyecto($id);
         header("Location: /user");
+    }
+    public function mostrarProyectoAction()
+    {
+        $proyectosModel = Proyectos::getInstancia();
+        // obtenemos la uri
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
+        $idUser = $proyectosModel->getUserProyecto($id);
+        // comprobamos si el usuario es el propietario del proyecto
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            header('Location: ../');
+            exit();
+        }
+
+        $proyectosModel->mostrarProyecto($id); // mostramos el proyecto
+        // redirigimos a la vista de editar
+        $_SESSION['mensaje'] = "proyecto mostrado con éxito.";
+        header('Location: ../editar');
+    }
+
+    public function ocultarProyectoAction()
+    {
+        $proyectosModel = Proyectos::getInstancia();
+        // obtenemos la uri
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
+        $idUser = $proyectosModel->getUserProyecto($id);
+        // comprobamos si el usuario es el propietario del proyecto
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            header('Location: ../');
+            exit();
+        }
+
+        $proyectosModel->ocultarProyecto($id);  // ocultamos el proyecto
+        // redirigimos a la vista de editar
+        $_SESSION['mensaje'] = "proyecto ocultado con éxito.";
+        header('Location: ../editar');
     }
 
 }

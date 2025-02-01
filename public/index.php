@@ -134,12 +134,12 @@ $router->add([
 $router->add([
     'name' => 'mostrarProyecto',
     'path' => '/^\/mostrarProyecto\/(\d+)$/',
-    'action' => [PortfolioController::class, 'mostrarProyectoAction']
+    'action' => [ProyectosControllers::class, 'mostrarProyectoAction']
 ]);
 $router->add([
     'name' => 'ocultarProyecto',
     'path' => '/^\/ocultarProyecto\/(\d+)$/',
-    'action' => [PortfolioController::class, 'ocultarProyectoAction']
+    'action' => [ProyectosControllers::class, 'ocultarProyectoAction']
 ]);
 // rutas de skills
 $router->add([

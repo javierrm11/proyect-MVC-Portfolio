@@ -327,47 +327,7 @@ class PortfolioController extends BaseController
         header("Location: ./user");
         exit();
     }
-
-    // Trabajos
     
-    // Proyectos
-    public function mostrarProyectoAction()
-    {
-        $portfolioModel = Portfolio::getInstancia();
-        // obtenemos la uri
-        $uri = $_SERVER['REQUEST_URI'];
-        $id = explode('/', $uri)[2];
-        $idUser = $portfolioModel->getUserProyecto($id);
-        // comprobamos si el usuario es el propietario del proyecto
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
-            header('Location: ../');
-            exit();
-        }
-
-        $portfolioModel->mostrarProyecto($id); // mostramos el proyecto
-        // redirigimos a la vista de editar
-        $_SESSION['mensaje'] = "proyecto mostrado con éxito.";
-        header('Location: ../editar');
-    }
-
-    public function ocultarProyectoAction()
-    {
-        $portfolioModel = Portfolio::getInstancia();
-        // obtenemos la uri
-        $uri = $_SERVER['REQUEST_URI'];
-        $id = explode('/', $uri)[2];
-        $idUser = $portfolioModel->getUserProyecto($id);
-        // comprobamos si el usuario es el propietario del proyecto
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
-            header('Location: ../');
-            exit();
-        }
-
-        $portfolioModel->ocultarProyecto($id);  // ocultamos el proyecto
-        // redirigimos a la vista de editar
-        $_SESSION['mensaje'] = "proyecto ocultado con éxito.";
-        header('Location: ../editar');
-    }
     // Skills
     public function mostrarSkillAction()
     {
