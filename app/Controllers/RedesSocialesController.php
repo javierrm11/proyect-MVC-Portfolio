@@ -40,7 +40,7 @@ class RedesSocialesController extends BaseController
                 $redSocialModel->setCreated_at(date('Y-m-d H:i:s'));
                 $redSocialModel->setUpdated_at(date('Y-m-d H:i:s'));
                 $redSocialModel->setUsuarios_id($_SESSION['usuario']['id']);
-                $redSocialModel->setRedSocial();
+                $redSocialModel->set();
                 header('Location: /user');
                 exit();
             }
@@ -54,7 +54,7 @@ class RedesSocialesController extends BaseController
         $url = explode("/", $url);
         $id = $url[2];
         //validar si el usuario esta logeado
-        $idUser = RedesSociales::getInstancia()->getUserRedSocial($id);
+        $idUser = RedesSociales::getInstancia()->get($id);
         if ($_SESSION["usuario"]["id"] != $idUser) {
             header("Location: /");
             exit();
@@ -63,7 +63,7 @@ class RedesSocialesController extends BaseController
         $id = explode('/', $uri)[2];
         $redSocialModel = RedesSociales::getInstancia();
         $redSocialModel->setId($id);
-        $redSocialModel->deleteRedSocial();
+        $redSocialModel->delete();
         header('Location: /user');
     }
 }
