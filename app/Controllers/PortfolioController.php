@@ -64,6 +64,7 @@ class PortfolioController extends BaseController
         }
 
         $usuarioId = $_SESSION['usuario']['id'];
+        // Datos del formulario
         $data = [
             'tituloTrabajos' => '',
             'descripcionTrabajos' => '',
@@ -245,11 +246,13 @@ class PortfolioController extends BaseController
                     $error = "Todos los campos son obligatorios";
                 }
             }
+            // Si no hay errores, guardamos los datos
             if($error == ""){
                 $portfolio["trabajos"] = [];
                 $portfolio["proyectos"] = [];
                 $portfolio["skills"] = [];
                 $portfolio["redes_sociales"] = [];
+                // Recogemos los datos del formulario
                 foreach ($trabajosModel as $trabajo) {
                     $trabajoId = $trabajo['id'];
                     $titulo = $_POST["tituloTrabajos_$trabajoId"];
@@ -301,13 +304,14 @@ class PortfolioController extends BaseController
                     ];
                     $portfolio['redes_sociales'][] = $redSocial;
                 }
-                
+                // Guardamos los datos
                 $portfolioModel->edit($portfolio);
                 header("Location: ./user");
                 $_SESSION['mensaje'] = "Portfolio actualizado con éxito.";
                 
             }
         }
+        // Mostramos la vista
         $data = [
             'trabajos' => $trabajosModel,
             'proyectos' => $proyectosModel,
@@ -316,7 +320,6 @@ class PortfolioController extends BaseController
             'portfolioExists' => true,
             'error' => $error
         ];
-
         $this->renderHTML('../app/views/view_editarPortfolio.php', $data);
     }
     // Borrar portfolio
