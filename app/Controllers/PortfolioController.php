@@ -195,7 +195,7 @@ class PortfolioController extends BaseController
         $portfolioModel = Portfolio::getInstancia();
         $portfolio = [];
         if (!isset($_SESSION['usuario'])) {
-            header('Location: view_login.php');
+            header('Location: ./login');
             exit();
         }
         $trabajosModel = Trabajos::getInstancia()->getTrabajos($_SESSION['usuario']['id']);
@@ -329,44 +329,7 @@ class PortfolioController extends BaseController
     }
 
     // Trabajos
-    public function mostrarTrabajoAction()
-    {
-        $portfolioModel = Portfolio::getInstancia();
-        // obtenemos la uri
-        $uri = $_SERVER['REQUEST_URI'];
-        $id = explode('/', $uri)[2];
-        $idUser = $portfolioModel->getUserTrabajo($id);
-        // comprobamos si el usuario es el propietario del trabajo
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
-            header('Location: ../');
-            exit();
-        }
-
-        $portfolioModel->mostrarTrabajo($id); // mostramos el trabajo
-        // redirigimos a la vista de editar
-        $_SESSION['mensaje'] = "Trabajo mostrado con éxito.";
-        header('Location: ../editar');
-    }
-
-    public function ocultarTrabajoAction()
-    {
-        $portfolioModel = Portfolio::getInstancia();
-        // obtenemos la uri
-        $uri = $_SERVER['REQUEST_URI'];
-        $id = explode('/', $uri)[2];
-        $idUser = $portfolioModel->getUserTrabajo($id);
-        // comprobamos si el usuario es el propietario del trabajo
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
-            header('Location: ../');
-            exit();
-        }
-        // ocultamos el trabajo
-        $portfolioModel = Portfolio::getInstancia();
-        $portfolioModel->ocultarTrabajo($id);
-        // redirigimos a la vista de editar
-        $_SESSION['mensaje'] = "Trabajo ocultado con éxito.";
-        header('Location: ../editar');
-    }
+    
     // Proyectos
     public function mostrarProyectoAction()
     {

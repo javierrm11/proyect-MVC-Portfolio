@@ -75,5 +75,44 @@ class TrabajosControllers extends BaseController
         $trabajoObj->deleteTrabajo($id);
         header("Location: /user");
     }
+    
+    public function mostrarTrabajoAction()
+    {
+        $trabajoModel = Trabajos::getInstancia();
+        // obtenemos la uri
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
+        $idUser = $trabajoModel->getUserTrabajo($id);
+        // comprobamos si el usuario es el propietario del trabajo
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            var_dump($idUser);
+            var_dump($_SESSION['usuario']['id']);
+            exit();
+        }
+
+        $trabajoModel->mostrarTrabajo($id); // mostramos el trabajo
+        // redirigimos a la vista de editar
+        $_SESSION['mensaje'] = "Trabajo mostrado con éxito.";
+        header('Location: ../editar');
+    }
+
+    public function ocultarTrabajoAction()
+    {
+        $trabajoModel = Trabajos::getInstancia();
+        // obtenemos la uri
+        $uri = $_SERVER['REQUEST_URI'];
+        $id = explode('/', $uri)[2];
+        $idUser = $trabajoModel->getUserTrabajo($id);
+        // comprobamos si el usuario es el propietario del trabajo
+        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+            header('Location: ../');
+            exit();
+        }
+        // ocultamos el trabajo
+        $trabajoModel->ocultarTrabajo($id);
+        // redirigimos a la vista de editar
+        $_SESSION['mensaje'] = "Trabajo ocultado con éxito.";
+        header('Location: ../editar');
+    }
 
 }

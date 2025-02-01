@@ -136,7 +136,7 @@ class Trabajos extends DBAbstractModel
         $this->query = "SELECT usuarios_id FROM trabajos WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
-        return $this->rows;
+        return $this->rows["0"]["usuarios_id"];
     }
     // funcion para obtener los trabajos de un usuario
     public function getTrabajos($id){
@@ -165,6 +165,19 @@ class Trabajos extends DBAbstractModel
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         $this->mensaje = "Trabajo eliminado";
+    }
+    public function mostrarTrabajo($id)
+    {
+        $this->query = "UPDATE trabajos SET visible = 1 WHERE id = :id";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+    }
+
+    public function ocultarTrabajo($id)
+    {
+        $this->query = "UPDATE trabajos SET visible = 0 WHERE id = :id";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query(); 
     }
     public function get(){
 

@@ -113,12 +113,12 @@ $router->add([
 $router->add([
     'name' => 'mostrarTrabajo',
     'path' => '/^\/mostrarTrabajo\/(\d+)$/',
-    'action' => [PortfolioController::class, 'mostrarTrabajoAction']
+    'action' => [TrabajosControllers::class, 'mostrarTrabajoAction']
 ]);
 $router->add([
     'name' => 'ocultarTrabajo',
     'path' => '/^\/ocultarTrabajo\/(\d+)$/',
-    'action' => [PortfolioController::class, 'ocultarTrabajoAction']
+    'action' => [TrabajosControllers::class, 'ocultarTrabajoAction']
 ]);
 // rutas de proyectos
 $router->add([

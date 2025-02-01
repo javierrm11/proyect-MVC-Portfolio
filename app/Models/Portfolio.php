@@ -233,19 +233,7 @@ class Portfolio extends DBAbstractModel
         $this->get_results_from_query();
     }
     //funciones para mostrar y ocultar los trabajos, proyectos y skills
-    public function mostrarTrabajo($id)
-    {
-        $this->query = "UPDATE trabajos SET visible = 1 WHERE id = :id";
-        $this->parametros['id'] = $id;
-        $this->get_results_from_query();
-    }
-
-    public function ocultarTrabajo($id)
-    {
-        $this->query = "UPDATE trabajos SET visible = 0 WHERE id = :id";
-        $this->parametros['id'] = $id;
-        $this->get_results_from_query(); 
-    }
+    
     public function mostrarProyecto($id)
     {
         $this->query = "UPDATE proyectos SET visible = 1 WHERE id = :id";
