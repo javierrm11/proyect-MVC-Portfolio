@@ -5,12 +5,13 @@ namespace App\Controllers;
 session_start();
 // Importar las clases necesarias
 use App\Models\Usuario;
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+
 use App\Models\Portfolio;
+use App\Controllers\MailerController;
 // Importar las clases necesarias
 require_once 'BaseController.php';
 require_once __DIR__ . '/../Models/Usuario.php';
+require_once __DIR__ . '/MailerController.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 class UsuariosController extends BaseController
@@ -134,30 +135,8 @@ class UsuariosController extends BaseController
                 $data['portfolioExists'] = false;
 
                 // Enviar correo de activación
-                $mail = new PHPMailer(true);
-                try {
-                    // Configuración del servidor
-                    $mail->isSMTP();
-                    $mail->Host = 'smtp.gmail.com'; // Cambia esto por tu servidor SMTP
-                    $mail->SMTPAuth = true;
-                    $mail->Username = $_ENV["CORREO"]; // Cambia esto por tu correo SMTP
-                    $mail->Password = $_ENV["PASS"]; // Cambia esto por tu contraseña SMTP
-                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port = 587;
-
-                    // Remitente y destinatario
-                    $mail->setFrom('javierrumo2@gmail.com', 'Javier');
-                    $mail->addAddress($data['email'], $data['nombre']);
-
-                    // Contenido del correo
-                    $mail->isHTML(true);
-                    $mail->Subject = 'Activación de cuenta';
-                    $mail->Body = "Hola {$data['nombre']},<br><br>Gracias por registrarte. Por favor, haz clic en el siguiente enlace para activar tu cuenta:<br><br><a href='http://www.proyectnavidad.local/index.php?controller=Usuarios&action=activarAction&token=$secureToken'>Activar cuenta</a><br><br>Este enlace es válido por 24 horas.";
-                    $mail->send();
-                    echo 'El mensaje ha sido enviado';
-                } catch (Exception $e) {
-                    echo "El mensaje no pudo ser enviado. Error de correo: {$mail->ErrorInfo}";
-                }
+                $mailer = new MailerController();
+                $mailer->sendActivationEmail($data['email'], $data['nombre'], $secureToken);
                 $mensaje = "Verifica su correo electronico para verificar su cuenta";
                 $_SESSION['mensaje'] = $mensaje;
                 // Redirigir a la página de login
