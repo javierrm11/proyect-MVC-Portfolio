@@ -58,7 +58,7 @@ class PortfolioController extends BaseController
     // Crear portfolio
     public function createAction()
     {
-        if (!isset($_SESSION['usuario'])) {
+        if (!isset($_SESSION['usuario']) || isset($_SESSION['portfolio'])) {
             header('Location: ./login');
             exit();
         }
@@ -196,7 +196,7 @@ class PortfolioController extends BaseController
     // Editar portfolio
     public function editAction()
     {
-        if(!isset($_SESSION['usuario'])){
+        if(!isset($_SESSION['usuario']) || !isset($_SESSION['portfolio'])){
             header('Location: ./login');
             exit();
         }

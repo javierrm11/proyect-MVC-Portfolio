@@ -185,7 +185,7 @@ class UsuariosController extends BaseController
                 }
             }
         }
-
+        // Almacenar los datos en $data
         $data = [
             'email' => $email,
             'password' => $password,
@@ -198,17 +198,20 @@ class UsuariosController extends BaseController
     }
     public function activarAction()
     {
+        // comprueba si el token es válido
         if (isset($_GET['token'])) {
             $token = $_GET['token'];
+            // Reemplazar los espacios en blanco por +
             $token = str_replace(" ", "+", $token);
 
             $usuario = Usuario::getInstancia();
-            $user = $usuario->getT($token);
+            $user = $usuario->getT($token); // Obtener el usuario por token
+            // Comprobar si el token es válido y si no ha expirado
             if ($user) {
                 $fecha_creacion_token = new \DateTime($user[0]['fecha_creacion_token']);
                 $fecha_actual = new \DateTime();
                 $intervalo = $fecha_creacion_token->diff($fecha_actual);
-                var_dump($fecha_creacion_token);
+                // Si el intervalo es menor a 24 horas, activar la cuenta
                 if ($intervalo->h < 24) {
                     $usuario->setId($user[0]['id']);
                     $usuario->editCuentaActiva();
