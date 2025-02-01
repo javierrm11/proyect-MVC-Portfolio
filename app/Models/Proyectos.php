@@ -95,7 +95,7 @@ class Proyectos extends DBAbstractModel
     }
 
 
-    public function setProyecto(){
+    public function set(){
         $fecha = new \DateTime();
 
         $this->query = "INSERT INTO proyectos (titulo, descripcion, tecnologias, visible, created_at, updated_at, usuarios_id) VALUES (:titulo, :descripcion, :tecnologias, :visible, :created_at, :updated_at, :usuarios_id)";
@@ -109,7 +109,7 @@ class Proyectos extends DBAbstractModel
         $this->get_results_from_query();
         $this->mensaje = "Proyecto agregado";
     }
-    public function getUserProyecto($id){
+    public function get($id = ''){
         $this->query = "SELECT usuarios_id FROM proyectos WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
@@ -121,7 +121,7 @@ class Proyectos extends DBAbstractModel
         $this->get_results_from_query();
         return $this->rows;
     }
-    public function deleteProyecto($id){
+    public function delete($id = ""){
         $this->query = "DELETE FROM proyectos WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
@@ -141,14 +141,7 @@ class Proyectos extends DBAbstractModel
         $this->parametros['id'] = $id;
         $this->get_results_from_query();  
     }
-    public function get(){}
-    public function set(){
-
-    }
     public function edit(){
-
-    }
-    public function delete(){
 
     }
 }

@@ -49,7 +49,7 @@ class ProyectosControllers extends BaseController
                 $proyectoObj->setCreatedAt($created_at);
                 $proyectoObj->setUpdatedAt($updated_at);
                 $proyectoObj->setUsuariosId($usuarios_id);
-                $proyectoObj->setProyecto();
+                $proyectoObj->set();
             }
         }
         $this->renderHTML('../app/views/view_addProyecto.php', $data);
@@ -60,7 +60,7 @@ class ProyectosControllers extends BaseController
         $url = explode("/", $url);
         $id = $url[2];
         //validar si el usuario esta logeado
-        $idUser = Proyectos::getInstancia()->getUserProyecto($id);
+        $idUser = Proyectos::getInstancia()->get($id);
         if ($_SESSION["usuario"]["id"] != $idUser) {
             header("Location: /");
             exit();
@@ -69,7 +69,7 @@ class ProyectosControllers extends BaseController
         $url = explode("/", $url);
         $id = $url[2];
         $trabajoObj = Proyectos::getInstancia();
-        $trabajoObj->deleteProyecto($id);
+        $trabajoObj->delete($id);
         header("Location: /user");
     }
     public function mostrarProyectoAction()
@@ -78,7 +78,7 @@ class ProyectosControllers extends BaseController
         // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
-        $idUser = $proyectosModel->getUserProyecto($id);
+        $idUser = $proyectosModel->get($id);
         // comprobamos si el usuario es el propietario del proyecto
         if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
             header('Location: ../');
@@ -97,7 +97,7 @@ class ProyectosControllers extends BaseController
         // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
-        $idUser = $proyectosModel->getUserProyecto($id);
+        $idUser = $proyectosModel->get($id);
         // comprobamos si el usuario es el propietario del proyecto
         if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
             header('Location: ../');
