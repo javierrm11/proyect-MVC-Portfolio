@@ -3,7 +3,7 @@
 namespace App\Models;
 
 require_once 'DBAbstractModel.php';
-
+require_once "CategoriaSkill.php";
 class Portfolio extends DBAbstractModel
 {
     private static $instancia;
@@ -23,52 +23,53 @@ class Portfolio extends DBAbstractModel
     public function set($data = [])
     {
         // Guardar proyectos
-        $this->query = "INSERT INTO proyectos(titulo, descripcion, tecnologias, visible, created_at, updated_at, usuarios_id) VALUES(:titulo, :descripcion, :tecnologias, :visible, :created_at, :updated_at, :usuarios_id)";
-        $this->parametros['titulo'] = $data['tituloProyectos'];
-        $this->parametros['descripcion'] = $data['descripcionProyectos'];
-        $this->parametros['tecnologias'] = $data['tecnologiasProyectos'];
-        $this->parametros['visible'] = 1;
-        $this->parametros['created_at'] = date("Y-m-d H:i:s");
-        $this->parametros['updated_at'] = date("Y-m-d H:i:s");
-        $this->parametros['usuarios_id'] = $data['usuarioId'];
-        $this->get_results_from_query();
+        $trabajoModel = Trabajos::getInstancia();
+        $trabajoModel->setTitulo($data['tituloTrabajos']);
+        $trabajoModel->setDescripcion($data['descripcionTrabajos']);
+        $trabajoModel->setFechaInicio($data['fecha_inicioTrabajos']);
+        $trabajoModel->setFechaFinal($data['fecha_finTrabajos']);
+        $trabajoModel->setLogros($data['logrosTrabajos']);
+        $trabajoModel->setVisible(1);
+        $trabajoModel->setCreatedAt(date("Y-m-d H:i:s"));
+        $trabajoModel->setUpdatedAt(date("Y-m-d H:i:s"));
+        $trabajoModel->setUsuariosId($data['usuarioId']);
+        $trabajoModel->set();
 
         // Guardar trabajos
-        $this->query = "INSERT INTO trabajos(titulo, descripcion, fecha_inicio, fecha_final, logros, visible, created_at, updated_at, usuarios_id) VALUES(:titulo, :descripcion, :fecha_inicio, :fecha_final, :logros, :visible, :created_at, :updated_at, :usuarios_id)";
-        $this->parametros['titulo'] = $data['tituloTrabajos'];
-        $this->parametros['descripcion'] = $data['descripcionTrabajos'];
-        $this->parametros['fecha_inicio'] = $data['fecha_inicioTrabajos'];
-        $this->parametros['fecha_final'] = $data['fecha_finTrabajos'];
-        $this->parametros['logros'] = $data['logrosTrabajos'];
-        $this->parametros['visible'] = 1;
-        $this->parametros['created_at'] = date("Y-m-d H:i:s");
-        $this->parametros['updated_at'] = date("Y-m-d H:i:s");
-        $this->parametros['usuarios_id'] = $data['usuarioId'];
-        $this->get_results_from_query();
+        $proyectoModel = Proyectos::getInstancia();
+        $proyectoModel->setTitulo($data['tituloProyectos']);
+        $proyectoModel->setDescripcion($data['descripcionProyectos']);
+        $proyectoModel->setTecnologias($data['tecnologiasProyectos']);
+        $proyectoModel->setVisible(1);
+        $proyectoModel->setCreatedAt(date("Y-m-d H:i:s"));
+        $proyectoModel->setUpdatedAt(date("Y-m-d H:i:s"));
+        $proyectoModel->setUsuariosId($data['usuarioId']);
+        $proyectoModel->set();
 
-        // guaradar categoria-skill
-        $this->query = "INSERT INTO categorias_skills(categoria) VALUES(:categoria)";
-        $this->parametros['categoria'] = $data['categoria'];
-        $this->get_results_from_query();
-
+        $categoriaModel = CategoriasSkill::getInstancia();
+        $isExist = $categoriaModel->getCategoria($data['categoria']);
+        if (!$isExist) {
+            $categoriaModel->setCategoria($data['categoria']);
+            $categoriaModel->set();
+        }
         // Guardar skills
-        $this->query = "INSERT INTO skills(habilidades, visible, created_at, updated_at, categorias_skills_categoria, usuarios_id) VALUES(:habilidades, :visible, :created_at, :updated_at, :categorias_skills_categoria, :usuarios_id)";
-        $this->parametros['habilidades'] = $data['habilidades'];
-        $this->parametros['visible'] = 1;
-        $this->parametros['created_at'] = date("Y-m-d H:i:s");
-        $this->parametros['updated_at'] = date("Y-m-d H:i:s");
-        $this->parametros['categorias_skills_categoria'] = $data['categoria'];
-        $this->parametros['usuarios_id'] = $data['usuarioId'];
-        $this->get_results_from_query();
-
+        $skillModel = Skills::getInstancia();
+        $skillModel->setHabilidades($data['habilidades']);
+        $skillModel->setVisible(1);
+        $skillModel->setCreatedAt(date("Y-m-d H:i:s"));
+        $skillModel->setUpdatedAt(date("Y-m-d H:i:s"));
+        $skillModel->setCategoriasSkillsCategoria($data['categoria']);
+        $skillModel->setUsuariosId($data['usuarioId']);
+        $skillModel->set();
+        
         // Guardar redes sociales
         $redesSociales = ['facebook', 'twitter', 'linkedin', 'github', 'instagram'];
         foreach ($redesSociales as $red) {
-            $this->query = "INSERT INTO redes_sociales(redes_socialescol, url, usuarios_id) VALUES(:redes_socialescol, :url, :usuarios_id)";
-            $this->parametros['redes_socialescol'] = $red;
-            $this->parametros['url'] = $data[$red];
-            $this->parametros['usuarios_id'] = $data['usuarioId'];
-            $this->get_results_from_query();
+            $redesSocialesModel = RedesSociales::getInstancia();
+            $redesSocialesModel->setRedesSocialescol($red);
+            $redesSocialesModel->setUrl($data[$red]);
+            $redesSocialesModel->setUsuarios_Id($data['usuarioId']);
+            $redesSocialesModel->set();
         }
     }
 

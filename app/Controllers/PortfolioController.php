@@ -7,6 +7,7 @@ use App\Models\RedesSociales;
 use App\Models\Proyectos;
 use App\Models\Trabajos;
 use App\Models\Skills;
+use App\Models\CategoriasSkills;
 
 require_once 'BaseController.php';
 require_once __DIR__ . '/../Models/Portfolio.php';
