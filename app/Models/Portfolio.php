@@ -20,7 +20,7 @@ class Portfolio extends DBAbstractModel
     private $proyecto;
     private $skill;
     private $redes_sociales;
-    public function setPortfolio($data)
+    public function set($data = [])
     {
         // Guardar proyectos
         $this->query = "INSERT INTO proyectos(titulo, descripcion, tecnologias, visible, created_at, updated_at, usuarios_id) VALUES(:titulo, :descripcion, :tecnologias, :visible, :created_at, :updated_at, :usuarios_id)";
@@ -102,7 +102,7 @@ class Portfolio extends DBAbstractModel
 
         return $portfolio;
     }
-    public function getPortfolioUser($usuarioId){
+    public function get($usuarioId = null){
         $portfolio = [];
 
         // Obtener proyectos
@@ -136,13 +136,6 @@ class Portfolio extends DBAbstractModel
 
         return $portfolio;
     }
-    //funciones para obtener el id del usuario
-    public function getUserSkill($id){
-        $this->query = "SELECT usuarios_id FROM skills WHERE id = :id";
-        $this->parametros['id'] = $id;
-        $this->get_results_from_query();
-        return $this->rows[0]['usuarios_id'];
-    }
     // funcion para obtener todos los datos del portfolio
     public function getPortfolioAll($usuarioId)
     {
@@ -175,7 +168,7 @@ class Portfolio extends DBAbstractModel
         return $portfolio;
     }
     // funcion para editar el portfolio
-    public function editPortfolio($portfolio)
+    public function edit($portfolio = [])
     {
         foreach ($portfolio as $tabla => $registros) {
             foreach ($registros as $campos) {
@@ -198,7 +191,7 @@ class Portfolio extends DBAbstractModel
         }
     }
     // funcion para borrar el portfolio
-    public function deletePortfolio($usuarioId)
+    public function delete($usuarioId = null)
     {
         // Borrar proyectos
         $this->query = "DELETE FROM proyectos WHERE usuarios_id = :usuarios_id";
@@ -220,9 +213,4 @@ class Portfolio extends DBAbstractModel
         $this->parametros['usuarios_id'] = $usuarioId;
         $this->get_results_from_query();
     }
-
-    public function get(){}
-    public function set(){}
-    public function edit(){}
-    public function delete(){}
 }

@@ -42,7 +42,7 @@ class PortfolioController extends BaseController
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
         $portfolioModel = Portfolio::getInstancia();
-        $data = $portfolioModel->getPortfolioUser($id);
+        $data = $portfolioModel->get($id);
         $data['portfolioExists'] = true;
         if($data['proyectos'] == null && $data['trabajos'] == null && $data['skills'] == null && $data['redes_sociales'] == null){
             $data['portfolioExists'] = false;
@@ -176,7 +176,7 @@ class PortfolioController extends BaseController
                 // Guardamos los datos en la base de datos
                 $data['usuarioId'] = $usuarioId;
                 $portfolioModel = Portfolio::getInstancia();
-                $portfolioModel->setPortfolio($data);
+                $portfolioModel->set($data);
 
                 // Redirigimos a la vista de usuario
                 header("Location: ./user");
@@ -297,7 +297,7 @@ class PortfolioController extends BaseController
                     $portfolio['redes_sociales'][] = $redSocial;
                 }
                 
-                $portfolioModel->editPortfolio($portfolio);
+                $portfolioModel->edit($portfolio);
                 $_SESSION['mensaje'] = "Portfolio actualizado con éxito.";
                 header("Location: ../user");
             }
@@ -324,7 +324,7 @@ class PortfolioController extends BaseController
         }
 
         $usuarioId = $_SESSION['usuario']['id'];
-        $portfolioModel->deletePortfolio($usuarioId);
+        $portfolioModel->delete($usuarioId);
 
         $_SESSION["portfolio"] = false;
         header("Location: ./user");
