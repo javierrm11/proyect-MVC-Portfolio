@@ -152,7 +152,7 @@ class UsuariosController extends BaseController
                     // Contenido del correo
                     $mail->isHTML(true);
                     $mail->Subject = 'Activación de cuenta';
-                    $mail->Body = "Hola {$data['nombre']},<br><br>Gracias por registrarte. Por favor, haz clic en el siguiente enlace para activar tu cuenta:<br><br><a href='http://www.proyectnavidad.local/index.php?controller=Usuarios&action=activar&token=$secureToken'>Activar cuenta</a><br><br>Este enlace es válido por 24 horas.";
+                    $mail->Body = "Hola {$data['nombre']},<br><br>Gracias por registrarte. Por favor, haz clic en el siguiente enlace para activar tu cuenta:<br><br><a href='http://www.proyectnavidad.local/index.php?controller=Usuarios&action=activarAction&token=$secureToken'>Activar cuenta</a><br><br>Este enlace es válido por 24 horas.";
                     $mail->send();
                     echo 'El mensaje ha sido enviado';
                 } catch (Exception $e) {
@@ -217,7 +217,7 @@ class UsuariosController extends BaseController
 
         $this->renderHTML('../app/views/view_login.php', $data);
     }
-    public function activar()
+    public function activarAction()
     {
         if (isset($_GET['token'])) {
             $token = $_GET['token'];
@@ -246,7 +246,7 @@ class UsuariosController extends BaseController
             $mensaje = "Token no proporcionado.";
         }
     }
-    public function buscar()
+    public function buscarAction()
     {
         if(isset($_POST['buscar'])){
             $buscar =  $_POST['buscar'] ?? "";

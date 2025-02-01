@@ -51,12 +51,12 @@ $router->add([
 $router->add([
     'name' => 'activar',
     'path' => '/^\/activar$/',
-    'action' => [UsuariosController::class, 'activar']
+    'action' => [UsuariosController::class, 'activarAction']
 ]);
 $router->add([
     'name' => 'buscar',
     'path' => '/^\/buscar$/',
-    'action' => [UsuariosController::class, 'buscar']
+    'action' => [UsuariosController::class, 'buscarAction']
 ]);
 $router->add([
     'name' => 'ocultarUsuario',
