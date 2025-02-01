@@ -14,7 +14,7 @@ require_once __DIR__ . '/../Models/RedesSociales.php';
 
 class PortfolioController extends BaseController
 {
-    public function index()
+    public function indexAction()
     {
         if (!isset($_SESSION['usuario'])) {
             header('Location: ./login');
@@ -36,7 +36,7 @@ class PortfolioController extends BaseController
 
         $this->renderHTML('../app/views/view_user.php', $data);
     }
-    public function getPortfolioUser(){
+    public function getPortfolioUserAction(){
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
         $portfolioModel = Portfolio::getInstancia();
@@ -48,7 +48,7 @@ class PortfolioController extends BaseController
         $this->renderHTML('../app/views/view_portfolio.php', $data);
     }
 
-    public function create()
+    public function createAction()
     {
         if (!isset($_SESSION['usuario'])) {
             header('Location: ./login');
@@ -184,7 +184,7 @@ class PortfolioController extends BaseController
 
         $this->renderHTML('../app/views/view_crearPortfolio.php', $data);
     }
-    public function edit()
+    public function editAction()
     {
         if(!isset($_SESSION['usuario'])){
             header('Location: ./login');
@@ -311,7 +311,7 @@ class PortfolioController extends BaseController
         $this->renderHTML('../app/views/view_editarPortfolio.php', $data);
     }
 
-    public function borrar()
+    public function borrarAction()
     {
         $portfolioModel = Portfolio::getInstancia();
         
@@ -329,7 +329,7 @@ class PortfolioController extends BaseController
     }
 
     // Trabajos
-    public function mostrarTrabajo()
+    public function mostrarTrabajoAction()
     {
         $portfolioModel = Portfolio::getInstancia();
         // obtenemos la uri
@@ -348,7 +348,7 @@ class PortfolioController extends BaseController
         header('Location: ../editar');
     }
 
-    public function ocultarTrabajo()
+    public function ocultarTrabajoAction()
     {
         $portfolioModel = Portfolio::getInstancia();
         // obtenemos la uri
@@ -368,7 +368,7 @@ class PortfolioController extends BaseController
         header('Location: ../editar');
     }
     // Proyectos
-    public function mostrarProyecto()
+    public function mostrarProyectoAction()
     {
         $portfolioModel = Portfolio::getInstancia();
         // obtenemos la uri
@@ -387,7 +387,7 @@ class PortfolioController extends BaseController
         header('Location: ../editar');
     }
 
-    public function ocultarProyecto()
+    public function ocultarProyectoAction()
     {
         $portfolioModel = Portfolio::getInstancia();
         // obtenemos la uri
@@ -406,7 +406,7 @@ class PortfolioController extends BaseController
         header('Location: ../editar');
     }
     // Skills
-    public function mostrarSkill()
+    public function mostrarSkillAction()
     {
         $portfolioModel = Portfolio::getInstancia();
         // obtenemos la uri
@@ -424,7 +424,7 @@ class PortfolioController extends BaseController
         $_SESSION['mensaje'] = "Skill mostrado con éxito.";
         header('Location: ../editar');
     }
-    public function ocultarSkill()
+    public function ocultarSkillAction()
     {
         $portfolioModel = Portfolio::getInstancia();
         // obtenemos la uri

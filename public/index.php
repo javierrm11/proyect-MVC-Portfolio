@@ -77,32 +77,27 @@ $router->add([
 $router->add([
     'name' => 'user',
     'path' => '/^\/user$/',
-    'action' => [PortfolioController::class, 'index']
+    'action' => [PortfolioController::class, 'indexAction']
 ]);
 $router->add([
     'name' => 'portfolio',
     'path' => '/^\/portfolio\/(\d+)$/',
-    'action' => [PortfolioController::class, 'getPortfolioUser']
-]);
-$router->add([
-    'name' => 'portfolio',
-    'path' => '/^\/portfolio\/(\d+)$/',
-    'action' => [PortfolioController::class, 'getPortfolioUser']
+    'action' => [PortfolioController::class, 'getPortfolioUserAction']
 ]);
 $router->add([
     'name' => 'crearPortfolio',
     'path' => '/^\/crearPortfolio$/',
-    'action' => [PortfolioController::class, 'create']
+    'action' => [PortfolioController::class, 'createAction']
 ]);
 $router->add([
     'name' => 'borrarPortfolio',
     'path' => '/^\/borrar$/',
-    'action' => [PortfolioController::class, 'borrar']
+    'action' => [PortfolioController::class, 'borrarAction']
 ]);
 $router->add([
     'name' => 'editarPortfolio',
     'path' => '/^\/editar$/',
-    'action' => [PortfolioController::class, 'edit']
+    'action' => [PortfolioController::class, 'editAction']
 ]);
 // rutas de trabajos
 $router->add([
@@ -118,12 +113,12 @@ $router->add([
 $router->add([
     'name' => 'mostrarTrabajo',
     'path' => '/^\/mostrarTrabajo\/(\d+)$/',
-    'action' => [PortfolioController::class, 'mostrarTrabajo']
+    'action' => [PortfolioController::class, 'mostrarTrabajoAction']
 ]);
 $router->add([
     'name' => 'ocultarTrabajo',
     'path' => '/^\/ocultarTrabajo\/(\d+)$/',
-    'action' => [PortfolioController::class, 'ocultarTrabajo']
+    'action' => [PortfolioController::class, 'ocultarTrabajoAction']
 ]);
 // rutas de proyectos
 $router->add([
@@ -139,12 +134,12 @@ $router->add([
 $router->add([
     'name' => 'mostrarProyecto',
     'path' => '/^\/mostrarProyecto\/(\d+)$/',
-    'action' => [PortfolioController::class, 'mostrarProyecto']
+    'action' => [PortfolioController::class, 'mostrarProyectoAction']
 ]);
 $router->add([
     'name' => 'ocultarProyecto',
     'path' => '/^\/ocultarProyecto\/(\d+)$/',
-    'action' => [PortfolioController::class, 'ocultarProyecto']
+    'action' => [PortfolioController::class, 'ocultarProyectoAction']
 ]);
 // rutas de skills
 $router->add([
@@ -160,12 +155,12 @@ $router->add([
 $router->add([
     'name' => 'mostrarSkill',
     'path' => '/^\/mostrarSkill\/(\d+)$/',
-    'action' => [PortfolioController::class, 'mostrarSkill']
+    'action' => [PortfolioController::class, 'mostrarSkillAction']
 ]);
 $router->add([
     'name' => 'ocultarSkill',
     'path' => '/^\/ocultarSkill\/(\d+)$/',
-    'action' => [PortfolioController::class, 'ocultarSkill']
+    'action' => [PortfolioController::class, 'ocultarSkillAction']
 ]);
 
 // rutas de redes sociales
