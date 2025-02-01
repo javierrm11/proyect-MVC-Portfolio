@@ -88,7 +88,7 @@ class Skills extends DBAbstractModel
 
 
 
-    public function setSkill(){
+    public function set(){
         $fecha = new \DateTime();
 
         $this->query = "INSERT INTO skills (habilidades, categorias_skills_categoria, visible, created_at, updated_at, usuarios_id) VALUES (:habilidades, :categorias_skills_categoria, :visible, :created_at, :updated_at, :usuarios_id)";
@@ -101,7 +101,7 @@ class Skills extends DBAbstractModel
         $this->get_results_from_query();
         $this->mensaje = "Proyecto agregado";
     }
-    public function getUserSkill($id){
+    public function get($id = ""){
         $this->query = "SELECT usuarios_id FROM skills WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
@@ -113,7 +113,7 @@ class Skills extends DBAbstractModel
         $this->get_results_from_query();
         return $this->rows;
     }
-    public function deleteSkill($id){
+    public function delete($id = ""){
         $this->query = "DELETE FROM skills WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
@@ -132,16 +132,7 @@ class Skills extends DBAbstractModel
         $this->parametros['id'] = $id;
         $this->get_results_from_query();   
     }
-    public function get(){
-
-    }
-    public function set(){
-
-    }
     public function edit(){
-
-    }
-    public function delete(){
 
     }
 }

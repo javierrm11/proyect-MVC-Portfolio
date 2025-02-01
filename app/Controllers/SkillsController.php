@@ -16,7 +16,6 @@ class SkillsController extends BaseController
         $url = explode("/", $url);
         $id = $url[2];
         //validar si el usuario esta logeado
-        Skills::getInstancia()->getUserSkill($id);
         if ($_SESSION["usuario"]["id"] != $id) {
             header("Location: /");
             exit();
@@ -47,7 +46,7 @@ class SkillsController extends BaseController
                 $proyectoObj->setCreatedAt($created_at);
                 $proyectoObj->setUpdatedAt($updated_at);
                 $proyectoObj->setUsuariosId($usuarios_id);
-                $proyectoObj->setSkill();
+                $proyectoObj->set();
             }
         }
         $this->renderHTML('../app/views/view_addSkill.php', $data);
@@ -58,7 +57,7 @@ class SkillsController extends BaseController
         $url = explode("/", $url);
         $id = $url[2];
         //validar si el usuario esta logeado
-        $idUser = Skills::getInstancia()->getUserSkill($id);
+        $idUser = Skills::getInstancia()->get($id);
         if ($_SESSION["usuario"]["id"] != $idUser) {
             header("Location: /");
             exit();
@@ -67,7 +66,7 @@ class SkillsController extends BaseController
         $url = explode("/", $url);
         $id = $url[2];
         $trabajoObj = Skills::getInstancia();
-        $trabajoObj->deleteSkill($id);
+        $trabajoObj->delete($id);
         header("Location: /user");
     }
     public function mostrarSkillAction()
@@ -76,7 +75,7 @@ class SkillsController extends BaseController
         // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
-        $idUser = $skillsModel->getUserSkill($id);
+        $idUser = $skillsModel->get($id);
         // comprobamos si el usuario es el propietario del proyecto
         if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
             header('Location: ../');
@@ -94,7 +93,7 @@ class SkillsController extends BaseController
         // obtenemos la uri
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
-        $idUser = $skillsModel->getUserSkill($id);
+        $idUser = $skillsModel->get($id);
         // comprobamos si el usuario es el propietario del proyecto
         if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
             header('Location: ../');
