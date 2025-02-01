@@ -14,6 +14,7 @@ require_once __DIR__ . '/../Models/RedesSociales.php';
 
 class PortfolioController extends BaseController
 {
+    // Ver portfolio de usuario
     public function indexAction()
     {
         if (!isset($_SESSION['usuario'])) {
@@ -36,6 +37,7 @@ class PortfolioController extends BaseController
 
         $this->renderHTML('../app/views/view_user.php', $data);
     }
+    // Ver portfolio de usuario
     public function getPortfolioUserAction(){
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
@@ -47,7 +49,7 @@ class PortfolioController extends BaseController
         }
         $this->renderHTML('../app/views/view_portfolio.php', $data);
     }
-
+    // Crear portfolio
     public function createAction()
     {
         if (!isset($_SESSION['usuario'])) {
@@ -184,6 +186,7 @@ class PortfolioController extends BaseController
 
         $this->renderHTML('../app/views/view_crearPortfolio.php', $data);
     }
+    // Editar portfolio
     public function editAction()
     {
         if(!isset($_SESSION['usuario'])){
@@ -310,7 +313,7 @@ class PortfolioController extends BaseController
 
         $this->renderHTML('../app/views/view_editarPortfolio.php', $data);
     }
-
+    // Borrar portfolio
     public function borrarAction()
     {
         $portfolioModel = Portfolio::getInstancia();

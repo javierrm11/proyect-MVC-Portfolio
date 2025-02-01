@@ -75,7 +75,7 @@ class RedesSociales extends DBAbstractModel
         $this->query = "SELECT usuarios_id FROM redes_sociales WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
-        return $this->rows;
+        return $this->rows[0]["usuarios_id"];
     }
     public function getRedesSociales($id){
         $this->query = "SELECT * FROM redes_sociales WHERE usuarios_id = :id";

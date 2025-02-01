@@ -61,7 +61,7 @@ class ProyectosControllers extends BaseController
         $id = $url[2];
         //validar si el usuario esta logeado
         $idUser = Proyectos::getInstancia()->getUserProyecto($id);
-        if ($_SESSION["usuario"]["id"] != $idUser[0]["usuarios_id"]) {
+        if ($_SESSION["usuario"]["id"] != $idUser) {
             header("Location: /");
             exit();
         }
