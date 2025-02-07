@@ -1,4 +1,15 @@
 <?php
+/**
+ * Aplicacion de portafolio de usuario con PHP y MySQL (POO)
+ * La aplicacion permite a los usuarios registrados crear su portafolio personal con sus trabajos, proyectos, habilidades y redes sociales.
+ * Tambien permite a los usuarios buscar otros usuarios y ver sus portafolios.
+ * Puede ocultar su portafolio para que no sea visible a otros usuarios.
+ * Puede ocultar sus trabajos, proyectos, habilidades y redes sociales para que no sean visibles a otros usuarios.
+ * Puede borrar su cuenta de usuario.
+ * @author javier ruiz molero
+*/
+
+
 // requreimos el bootstrap y el autoload para la carga automatica de clases
 require_once "../vendor/autoload.php";
 require_once "../bootstrap.php";

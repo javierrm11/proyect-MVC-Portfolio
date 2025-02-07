@@ -138,6 +138,7 @@ class Usuario extends DBAbstractModel{
     {
         return $this->mensaje;
     }
+    // funcion para obtener todos los usuarios
     public function getAll(){
         $this->query = "SELECT * FROM usuarios where cuenta_activa = 1";
         $this->get_results_from_query();
@@ -146,6 +147,7 @@ class Usuario extends DBAbstractModel{
         }
         
     }
+    // funcion para obtener todos los usuarios visibles
     public function getAllVisible(){
         $this->query = "SELECT * FROM usuarios where cuenta_activa = 1 and visible = 1";
         $this->get_results_from_query();
@@ -153,7 +155,7 @@ class Usuario extends DBAbstractModel{
             return $this->rows;
         }
     }
-    
+    // funcion para obtener todos los usuarios
     public function getUser($id){
         $this->query = "SELECT * FROM usuarios where id = :id";
         $this->parametros['id'] = $id;
@@ -162,7 +164,7 @@ class Usuario extends DBAbstractModel{
             return $this->rows;
         }
     }
-
+    // funcion para obtener el usuario por email
     public function get($correo = ""){
         $this->query = "SELECT id FROM usuarios WHERE email = :email";
         $this->parametros['email'] = $correo;
@@ -171,6 +173,7 @@ class Usuario extends DBAbstractModel{
             return $this->rows;
         }
     }
+    // funcion para obtener el usuario por token
     public function getT($token)
     {
         $this->query = "SELECT * FROM usuarios WHERE token = :token";
@@ -178,6 +181,7 @@ class Usuario extends DBAbstractModel{
         $this->get_results_from_query();
         return $this->rows;
     }
+    // funcion para añañdir un usuario
     public function set(){
         $this->query = "INSERT INTO usuarios(nombre, apellidos, foto, categoria_profesional, email, resumen_perfil, password, visible, created_at, updated_at, token, fecha_creacion_token, cuenta_activa) VALUES(:nombre, :apellidos, :foto, :categoria_profesional, :email, :resumen_perfil, :password, :visible, :created_at, :updated_at, :token, :fecha_creacion_token, :cuenta_activa)";
         
@@ -199,6 +203,7 @@ class Usuario extends DBAbstractModel{
         //$this->execute_single_query();
         $this->mensaje = 'Usuario añadido.';
     }
+    // funcion para buscar usuarios
     public function buscar($buscar)
     {
         $this->query = "
@@ -233,7 +238,7 @@ class Usuario extends DBAbstractModel{
         return array_values($uniqueUsers);
     }
     
-    
+    // funcion para borrar un usuario
     public function delete(){
         $this->query = "DELETE FROM usuarios WHERE id = :id";
         $this->parametros['id'] = $this->id;
@@ -241,6 +246,7 @@ class Usuario extends DBAbstractModel{
         $this->mensaje = 'Usuario eliminado.';
     }
     public function edit(){}
+    // funcion para editar cuenta activa
     public function editCuentaActiva(){
         $this->query = "UPDATE usuarios 
         SET cuenta_activa = 1 WHERE id = :id";
@@ -248,6 +254,7 @@ class Usuario extends DBAbstractModel{
         $this->get_results_from_query();
         $this->mensaje = 'Cuenta activada con éxito. Ahora puedes iniciar sesión.';
     }
+    // funcion para ocultar usuario
     public function ocultarUsuario(){
         $this->query = "UPDATE usuarios 
         SET visible = 0 WHERE id = :id";
@@ -255,6 +262,7 @@ class Usuario extends DBAbstractModel{
         $this->get_results_from_query();
         $this->mensaje = 'Usuario ocultado con éxito.';
     }
+    // funcion para mostrar usuario
     public function mostrarUsuario(){
         $this->query = "UPDATE usuarios 
         SET visible = 1 WHERE id = :id";

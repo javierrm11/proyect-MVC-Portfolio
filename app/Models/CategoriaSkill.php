@@ -31,13 +31,14 @@ class CategoriasSkill extends DBAbstractModel
         $this->categoria = $categoria;
     }
 
-
+    // funcion para añañir una categoria
     public function set(){
         $this->query = "INSERT INTO categorias_skills (categoria) VALUES (:categoria)";
         $this->parametros['categoria'] = $this->categoria;
         $this->get_results_from_query();
         $this->mensaje = "Categoria creada";   
     }
+    // funcion para obtener la categoria por nombre
     public function get($categoria = ''){
         $this->query = "SELECT * FROM categorias_skills where categoria = :categoria";
         $this->parametros['categoria'] = $categoria;

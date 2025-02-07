@@ -84,10 +84,7 @@ class Skills extends DBAbstractModel
     {
         $this->usuarios_id = $usuarios_id;
     }
-    
-
-
-
+    // funcion para agregar skill
     public function set(){
         $categoriaModel = CategoriasSkill::getInstancia();
         $isExist = $categoriaModel->getCategoria($this->categorias_skills_categoria);
@@ -107,38 +104,57 @@ class Skills extends DBAbstractModel
         $this->get_results_from_query();
         $this->mensaje = "Proyecto agregado";
     }
+    // funcion para obtener skill
     public function get($id = ""){
         $this->query = "SELECT usuarios_id FROM skills WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows[0]['usuarios_id'];
     }
+    // funcion para obtener skills
     public function getSkills($id){
         $this->query = "SELECT * FROM skills WHERE usuarios_id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows;
     }
+    // funcion para obtener skills visibles
+    public function getSkillsVisibles($id){
+        $this->query = "SELECT * FROM skills WHERE usuarios_id = :id and visible = 1";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+        return $this->rows;
+    }
+    // funcion para editar skill
+    public function edit(){
+        $fecha = new \DateTime();
+        $this->query = "UPDATE skills SET habilidades = :habilidades, categorias_skills_categoria = :categorias_skills_categoria, updated_at = :updated_at WHERE id = :id";
+        $this->parametros['habilidades'] = $this->habilidades;
+        $this->parametros['categorias_skills_categoria'] = $this->categorias_skills_categoria;
+        $this->parametros['updated_at'] = date( 'Y-m-d H:i:s', $fecha->getTimestamp());
+        $this->parametros['id'] = $this->id;
+        $this->get_results_from_query();
+        $this->mensaje = "Skill actualizado";
+    }
+    // funcion para eliminar skill
     public function delete($id = ""){
         $this->query = "DELETE FROM skills WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         $this->mensaje = "Skill eliminado";
     }
+    // funcion para mostrar skill
     public function mostrarSkill($id)
     {
         $this->query = "UPDATE skills SET visible = 1 WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
     }
-
+    // funcion para ocultar skill
     public function ocultarSkill($id)
     {
         $this->query = "UPDATE skills SET visible = 0 WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();   
-    }
-    public function edit(){
-
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\Proyectos;
-use App\Models\Trabajos;
 
 require_once 'BaseController.php';
 require_once __DIR__ . '/../Models/Proyectos.php';
@@ -54,6 +53,7 @@ class ProyectosControllers extends BaseController
         }
         $this->renderHTML('../app/views/view_addProyecto.php', $data);
     }
+    // funcion para editar proyecto
     public function deleteProyectoAction(){
         //obtener url
         $url = $_SERVER["REQUEST_URI"];
@@ -72,6 +72,7 @@ class ProyectosControllers extends BaseController
         $trabajoObj->delete($id);
         header("Location: /user");
     }
+    // funcion para mostrar proyecto
     public function mostrarProyectoAction()
     {
         $proyectosModel = Proyectos::getInstancia();
@@ -90,7 +91,7 @@ class ProyectosControllers extends BaseController
         $_SESSION['mensaje'] = "proyecto mostrado con éxito.";
         header('Location: ../editar');
     }
-
+    // funcion para ocultar proyecto
     public function ocultarProyectoAction()
     {
         $proyectosModel = Proyectos::getInstancia();

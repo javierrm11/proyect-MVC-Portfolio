@@ -71,18 +71,21 @@ class RedesSociales extends DBAbstractModel
     {
         $this->usuarios_id = $usuarios_id;
     }
+    // funcion para obtener una red social
     public function get($id = ""){
         $this->query = "SELECT usuarios_id FROM redes_sociales WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows[0]["usuarios_id"];
     }
+    // funcion para obtener todas las redes sociales
     public function getRedesSociales($id){
         $this->query = "SELECT * FROM redes_sociales WHERE usuarios_id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows;
     }
+    // funcion para agregar redes sociales
     public function set()
     {
         $this->query = "INSERT INTO redes_sociales (redes_socialescol, url, created_at, updated_at, usuarios_id) VALUES (:redes_socialescol, :url, :created_at, :updated_at, :usuarios_id)";
@@ -93,17 +96,18 @@ class RedesSociales extends DBAbstractModel
         $this->parametros['usuarios_id'] = $this->usuarios_id;
         $this->get_results_from_query();
     }
-    public function delete(){
-        $this->query = "DELETE FROM redes_sociales WHERE id = :id";
+    // funcion para editar redes sociales
+    public function edit(){
+        $this->query = "UPDATE redes_sociales SET redes_socialescol = :redes_socialescol, url = :url WHERE id = :id";
+        $this->parametros['redes_socialescol'] = $this->redes_socialescol;
+        $this->parametros['url'] = $this->url;
         $this->parametros['id'] = $this->id;
         $this->get_results_from_query();
     }
-
-    public function edit($id = "", $redes_socialescol = "", $url = ""){
-        $this->query = "UPDATE redes_sociales SET redes_socialescol = :redes_socialescol, url = :url WHERE id = :id";
-        $this->parametros['redes_socialescol'] = $redes_socialescol;
-        $this->parametros['url'] = $url;
-        $this->parametros['id'] = $id;
+    // funcion para eliminar redes sociales
+    public function delete(){
+        $this->query = "DELETE FROM redes_sociales WHERE id = :id";
+        $this->parametros['id'] = $this->id;
         $this->get_results_from_query();
     }
 }

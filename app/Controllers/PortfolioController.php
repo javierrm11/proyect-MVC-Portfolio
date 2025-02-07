@@ -58,7 +58,7 @@ class PortfolioController extends BaseController
     // Crear portfolio
     public function createAction()
     {
-        if (!isset($_SESSION['usuario']) || isset($_SESSION['portfolio'])) {
+        if (!isset($_SESSION['usuario'])) {
             header('Location: ./login');
             exit();
         }
@@ -183,7 +183,34 @@ class PortfolioController extends BaseController
                 // Guardamos los datos en la base de datos
                 $data['usuarioId'] = $usuarioId;
                 $portfolioModel = Portfolio::getInstancia();
-                $portfolioModel->set($data);
+                $portfolioModel->setTrabajo([
+                    'titulo' => $data['tituloTrabajos'],
+                    'descripcion' => $data['descripcionTrabajos'],
+                    'fecha_inicio' => $data['fecha_inicioTrabajos'],
+                    'fecha_final' => $data['fecha_finTrabajos'],
+                    'logros' => $data['logrosTrabajos'],
+                    'usuarioId' => $usuarioId
+                ]);
+                $portfolioModel->setProyecto([
+                    'titulo' => $data['tituloProyectos'],
+                    'descripcion' => $data['descripcionProyectos'],
+                    'tecnologias' => $data['tecnologiasProyectos'],
+                    'usuarioId' => $usuarioId
+                ]);
+                $portfolioModel->setSkill([
+                    'habilidades' => $data['habilidades'],
+                    'categorias_skills_categoria' => $data['categoria'],
+                    'usuarioId' => $usuarioId
+                ]);
+                $portfolioModel->setRedesSociales([
+                    'facebook' => $data['facebook'],
+                    'twitter' => $data['twitter'],
+                    'linkedin' => $data['linkedin'],
+                    'github' => $data['github'],
+                    'instagram' => $data['instagram'],
+                    'usuarioId' => $usuarioId,
+                ]);
+                $portfolioModel->set();
 
                 // Redirigimos a la vista de usuario
                 header("Location: ./user");
@@ -196,122 +223,106 @@ class PortfolioController extends BaseController
     // Editar portfolio
     public function editAction()
     {
-        if(!isset($_SESSION['usuario']) || !isset($_SESSION['portfolio'])){
+        if (!isset($_SESSION['usuario'])) {
             header('Location: ./login');
             exit();
         }
+        // Obtenemos el usuario
         $usuarioId = $_SESSION['usuario']['id'];
         $error = "";
-        $portfolioModel = Portfolio::getInstancia();
         
-        $portfolio = [];
+        $portfolioModel = Portfolio::getInstancia();
+
         // Obtenemos los datos del portfolio
         $trabajosModel = Trabajos::getInstancia()->getTrabajos($usuarioId);
         $proyectosModel = Proyectos::getInstancia()->getProyectos($usuarioId);
         $skillsModel = Skills::getInstancia()->getSkills($usuarioId);
         $redesSocialesModel = RedesSociales::getInstancia()->getRedesSociales($usuarioId);
-        if(isset($_POST["guardar"])){
-            foreach ($trabajosModel as $trabajo) {
-                $trabajoId = $trabajo['id'];
-                $titulo = $_POST["tituloTrabajos_$trabajoId"];
-                $descripcion = $_POST["descripcionTrabajos_$trabajoId"];
-                $fecha_inicio = $_POST["fecha_inicioTrabajos_$trabajoId"];
-                $fecha_fin = $_POST["fecha_finTrabajos_$trabajoId"];
-                $logros = $_POST["logrosTrabajos_$trabajoId"];
-                if(empty($titulo) || empty($descripcion) || empty($fecha_inicio) || empty($fecha_fin) || empty($logros)){
-                    $error = "Todos los campos son obligatorios";
+
+        if (isset($_POST["guardar"])) {
+            $models = ['trabajos' => $trabajosModel,'proyectos' => $proyectosModel,'skills' => $skillsModel,'redes_sociales' => $redesSocialesModel];
+            // Validación de errores en los campos de los formularios de trabajos, proyectos, skills y redes sociales
+            foreach ($models as $type => $model) {
+                foreach ($model as $item) {
+                    $itemId = $item['id']; // Id del item
+                    // Validación de campos vacíos según el tipo de formulario
+                    switch ($type) {
+                        case 'trabajos':
+                            if (empty($_POST["tituloTrabajos_$itemId"]) || empty($_POST["descripcionTrabajos_$itemId"]) || empty($_POST["fecha_inicioTrabajos_$itemId"]) || empty($_POST["fecha_finTrabajos_$itemId"]) || empty($_POST["logrosTrabajos_$itemId"])) {
+                                $error = "Todos los campos son obligatorios";
+                            }
+                            break;
+                        case 'proyectos':
+                            if (empty($_POST["tituloProyectos_$itemId"]) || empty($_POST["descripcionProyectos_$itemId"]) || empty($_POST["tecnologiasProyectos_$itemId"])) {
+                                $error = "Todos los campos son obligatorios";
+                            }
+                            break;
+                        case 'skills':
+                            if (empty($_POST["habilidades_$itemId"]) || empty($_POST["categoria_$itemId"])) {
+                                $error = "Todos los campos son obligatorios";
+                            }
+                            break;
+                        case 'redes_sociales':
+                            if (empty($_POST["redes_$itemId"])) {
+                                $error = "Todos los campos son obligatorios";
+                            }
+                            break;
+                    }
                 }
             }
-            foreach ($proyectosModel as $proyecto) {
-                $proyectoId = $proyecto['id'];
-                $titulo = $_POST["tituloProyectos_$proyectoId"];
-                $descripcion = $_POST["descripcionProyectos_$proyectoId"];
-                $tecnologias = $_POST["tecnologiasProyectos_$proyectoId"];
-                if(empty($titulo) || empty($descripcion) || empty($tecnologias)){
-                    $error = "Todos los campos son obligatorios";
-                }
-            }
-            foreach ($skillsModel as $skill) {
-                $skillId = $skill['id'];
-                $habilidades = $_POST["habilidades_$skillId"];
-                $categoria = $_POST["categoria_$skillId"];
-                if(empty($habilidades) || empty($categoria)){
-                    $error = "Todos los campos son obligatorios";
-                }
-            }
-            foreach ($redesSocialesModel as $redSocial) {
-                $redSocialId = $redSocial['id'];
-                $redSocialUrl = $_POST["redes_$redSocialId"];
-                if(empty($redSocialUrl)){
-                    $error = "Todos los campos son obligatorios";
-                }
-            }
+
             // Si no hay errores, guardamos los datos
-            if($error == ""){
-                $portfolio["trabajos"] = [];
-                $portfolio["proyectos"] = [];
-                $portfolio["skills"] = [];
-                $portfolio["redes_sociales"] = [];
-                // Recogemos los datos del formulario
+            if ($error == "") {
+                $portfolio = [
+                    "trabajos" => [],
+                    "proyectos" => [],
+                    "skills" => [],
+                    "redes_sociales" => []
+                ];
+                // Recorremos los datos de los formularios y los guardamos en el array $portfolio
                 foreach ($trabajosModel as $trabajo) {
                     $trabajoId = $trabajo['id'];
-                    $titulo = $_POST["tituloTrabajos_$trabajoId"];
-                    $descripcion = $_POST["descripcionTrabajos_$trabajoId"];
-                    $fecha_inicio = $_POST["fecha_inicioTrabajos_$trabajoId"];
-                    $fecha_final = $_POST["fecha_finTrabajos_$trabajoId"];
-                    $logros = $_POST["logrosTrabajos_$trabajoId"];
-                    $trabajo = [
+                    $portfolio['trabajos'][] = [
                         'id' => $trabajoId,
-                        'titulo' => $titulo,
-                        'descripcion' => $descripcion,
-                        'fecha_inicio' => $fecha_inicio,
-                        'fecha_final' => $fecha_final,
-                        'logros' => $logros
+                        'titulo' => $_POST["tituloTrabajos_$trabajoId"],
+                        'descripcion' => $_POST["descripcionTrabajos_$trabajoId"],
+                        'fecha_inicio' => $_POST["fecha_inicioTrabajos_$trabajoId"],
+                        'fecha_final' => $_POST["fecha_finTrabajos_$trabajoId"],
+                        'logros' => $_POST["logrosTrabajos_$trabajoId"]
                     ];
-                    $portfolio['trabajos'][] = $trabajo;
                 }
                 foreach ($proyectosModel as $proyecto) {
                     $proyectoId = $proyecto['id'];
-                    $titulo = $_POST["tituloProyectos_$proyectoId"];
-                    $descripcion = $_POST["descripcionProyectos_$proyectoId"];
-                    $tecnologias = $_POST["tecnologiasProyectos_$proyectoId"];
-                    $proyecto = [
+                    $portfolio['proyectos'][] = [
                         'id' => $proyectoId,
-                        'titulo' => $titulo,
-                        'descripcion' => $descripcion,
-                        'tecnologias' => $tecnologias
+                        'titulo' => $_POST["tituloProyectos_$proyectoId"],
+                        'descripcion' => $_POST["descripcionProyectos_$proyectoId"],
+                        'tecnologias' => $_POST["tecnologiasProyectos_$proyectoId"]
                     ];
-                    $portfolio['proyectos'][] = $proyecto;
                 }
                 foreach ($skillsModel as $skill) {
                     $skillId = $skill['id'];
-                    $habilidades = $_POST["habilidades_$skillId"];
-                    $categoria = $_POST["categoria_$skillId"];
-                    $skill = [
+                    $portfolio['skills'][] = [
                         'id' => $skillId,
-                        'habilidades' => $habilidades,
-                        'categorias_skills_categoria' => $categoria
+                        'habilidades' => $_POST["habilidades_$skillId"],
+                        'categorias_skills_categoria' => $_POST["categoria_$skillId"]
                     ];
-                    $portfolio['skills'][] = $skill;
                 }
                 foreach ($redesSocialesModel as $redSocial) {
                     $redSocialId = $redSocial['id'];
-                    $redSocialUrl = $_POST["redes_$redSocialId"];
-                    $redSocial = [
+                    $portfolio['redes_sociales'][] = [
                         'id' => $redSocialId,
                         "redes_socialescol" => $redSocial['redes_socialescol'],
-                        'url' => $redSocialUrl
+                        'url' => $_POST["redes_$redSocialId"]
                     ];
-                    $portfolio['redes_sociales'][] = $redSocial;
                 }
-                // Guardamos los datos
-                $portfolioModel->edit($portfolio);
+                $portfolioModel->setPortfolio($portfolio);
+                $portfolioModel->edit();
                 header("Location: ./user");
                 $_SESSION['mensaje'] = "Portfolio actualizado con éxito.";
-                
             }
         }
-        // Mostramos la vista
+
         $data = [
             'trabajos' => $trabajosModel,
             'proyectos' => $proyectosModel,

@@ -15,45 +15,92 @@ class Portfolio extends DBAbstractModel
         }
         return self::$instancia;
     }
-
+    private $portfolio;
     private $trabajo;
     private $proyecto;
     private $skill;
     private $redes_sociales;
-    public function set($data = [])
+
+    //gets y sets
+    public function getPortfolio()
+    {
+        return $this->portfolio;
+    }
+    public function setPortfolio($portfolio)
+    {
+        $this->portfolio = $portfolio;
+    }
+    public function getTrabajo()
+    {
+        return $this->trabajo;
+    }
+    public function setTrabajo($trabajo)
+    {
+        $this->trabajo = $trabajo;
+    }
+    public function getProyecto()
+    {
+        return $this->proyecto;
+    }
+    public function setProyecto($proyecto)
+    {
+        $this->proyecto = $proyecto;
+    }
+    public function getSkill()
+    {
+        return $this->skill;
+    }
+    
+    public function setSkill($skill)
+    {
+        $this->skill = $skill;
+    }
+    public function getRedesSociales()
+    {
+        return $this->redes_sociales;
+    }
+    public function setRedesSociales($redes_sociales)
+    {
+        $this->redes_sociales = $redes_sociales;
+    }
+    public function set()
     {
         // Guardar proyectos
         $trabajoModel = Trabajos::getInstancia();
-        $trabajoModel->setTitulo($data['tituloTrabajos']);
-        $trabajoModel->setDescripcion($data['descripcionTrabajos']);
-        $trabajoModel->setFechaInicio($data['fecha_inicioTrabajos']);
-        $trabajoModel->setFechaFinal($data['fecha_finTrabajos']);
-        $trabajoModel->setLogros($data['logrosTrabajos']);
+        $trabajoModel->setTitulo($this->trabajo['titulo']);
+        $trabajoModel->setDescripcion($this->trabajo['descripcion']);
+        $trabajoModel->setFechaInicio($this->trabajo['fecha_inicio']);
+        $trabajoModel->setFechaFinal($this->trabajo['fecha_final']);
+        $trabajoModel->setLogros($this->trabajo['logros']);
         $trabajoModel->setVisible(1);
-        $trabajoModel->setCreatedAt(date("Y-m-d H:i:s"));
-        $trabajoModel->setUpdatedAt(date("Y-m-d H:i:s"));
-        $trabajoModel->setUsuariosId($data['usuarioId']);
+        $trabajoModel->setUsuariosId($this->trabajo['usuarioId']);
         $trabajoModel->set();
 
         // Guardar trabajos
         $proyectoModel = Proyectos::getInstancia();
-        $proyectoModel->setTitulo($data['tituloProyectos']);
-        $proyectoModel->setDescripcion($data['descripcionProyectos']);
-        $proyectoModel->setTecnologias($data['tecnologiasProyectos']);
+        $proyectoModel->setTitulo($this->proyecto['titulo']);
+        $proyectoModel->setDescripcion($this->proyecto['descripcion']);
+        $proyectoModel->setTecnologias($this->proyecto['tecnologias']);
         $proyectoModel->setVisible(1);
         $proyectoModel->setCreatedAt(date("Y-m-d H:i:s"));
         $proyectoModel->setUpdatedAt(date("Y-m-d H:i:s"));
-        $proyectoModel->setUsuariosId($data['usuarioId']);
+        $proyectoModel->setUsuariosId($this->proyecto['usuarioId']);
         $proyectoModel->set();
 
         // Guardar skills
         $skillModel = Skills::getInstancia();
-        $skillModel->setHabilidades($data['habilidades']);
+        $categoriaModel = CategoriasSkill::getInstancia();
+        $isExist = $categoriaModel->get($this->skill['categorias_skills_categoria']);
+        if (!$isExist) {
+            $categoriaModel->setCategoria($this->skill['categorias_skills_categoria']);
+            $categoriaModel->set();
+        }
+        $skillModel->setHabilidades($this->skill['habilidades']);
+        $skillModel->setCategoriasSkillsCategoria($this->skill['categorias_skills_categoria']);
         $skillModel->setVisible(1);
         $skillModel->setCreatedAt(date("Y-m-d H:i:s"));
         $skillModel->setUpdatedAt(date("Y-m-d H:i:s"));
-        $skillModel->setCategoriasSkillsCategoria($data['categoria']);
-        $skillModel->setUsuariosId($data['usuarioId']);
+        $skillModel->setUsuariosId($this->skill['usuarioId']);
         $skillModel->set();
         
         // Guardar redes sociales
@@ -61,8 +108,8 @@ class Portfolio extends DBAbstractModel
         foreach ($redesSociales as $red) {
             $redesSocialesModel = RedesSociales::getInstancia();
             $redesSocialesModel->setRedesSocialescol($red);
-            $redesSocialesModel->setUrl($data[$red]);
-            $redesSocialesModel->setUsuarios_Id($data['usuarioId']);
+            $redesSocialesModel->setUrl($this->redes_sociales[$red]);
+            $redesSocialesModel->setUsuarios_id($this->redes_sociales['usuarioId']);
             $redesSocialesModel->set();
         }
     }
@@ -73,15 +120,15 @@ class Portfolio extends DBAbstractModel
 
         // Obtener trabajos
         $trabajoModel = Trabajos::getInstancia();
-        $portfolio["trabajos"] = $trabajoModel->getTrabajos($usuarioId);
+        $portfolio["trabajos"] = $trabajoModel->getTrabajosVisibles($usuarioId);
 
         // Obtener proyectos
         $proyectoModel = Proyectos::getInstancia();
-        $portfolio["proyectos"] = $proyectoModel->getProyectos($usuarioId);
+        $portfolio["proyectos"] = $proyectoModel->getProyectosVisibles($usuarioId);
 
         // Obtener skills
         $skillModel = Skills::getInstancia();
-        $portfolio["skills"] = $skillModel->getSkills($usuarioId);
+        $portfolio["skills"] = $skillModel->getSkillsVisibles($usuarioId);
 
         // Obtener redes sociales
         $redesSocialesModel = RedesSociales::getInstancia();
@@ -121,17 +168,28 @@ class Portfolio extends DBAbstractModel
         return $portfolio;
     }
     // funcion para editar el portfolio
-    public function edit($portfolio = [])
+    public function edit()
     {
-        foreach ($portfolio["trabajos"] as $registros) {
+        // recorrer los datos del portfolio y actualizarlos
+        foreach ($this->portfolio["trabajos"] as $registros) {
             $trabajoModel = Trabajos::getInstancia();
-            $trabajoModel->edit($registros["id"], $registros["titulo"], $registros["descripcion"], $registros["fecha_inicio"], $registros["fecha_final"], $registros["logros"]);
+            $trabajoModel->setId($registros["id"]);
+            $trabajoModel->setTitulo($registros["titulo"]);
+            $trabajoModel->setDescripcion($registros["descripcion"]);
+            $trabajoModel->setFechaInicio($registros["fecha_inicio"]);
+            $trabajoModel->setFechaFinal($registros["fecha_final"]);
+            $trabajoModel->setLogros($registros["logros"]);
+            $trabajoModel->edit();
         }
-        foreach ($portfolio["proyectos"] as $registros) {
+        foreach ($this->portfolio["proyectos"] as $registros) {
             $proyectoModel = Proyectos::getInstancia();
-            $proyectoModel->edit($registros["id"], $registros["titulo"], $registros["descripcion"], $registros["tecnologias"]);
+            $proyectoModel->setId($registros["id"]);
+            $proyectoModel->setTitulo($registros["titulo"]);
+            $proyectoModel->setDescripcion($registros["descripcion"]);
+            $proyectoModel->setTecnologias($registros["tecnologias"]);
+            $proyectoModel->edit();
         }
-        foreach ($portfolio["skills"] as $registros) {
+        foreach ($this->portfolio["skills"] as $registros) {
             $categoriaModel = CategoriasSkill::getInstancia();
             $isExist = $categoriaModel->getCategoria($registros["categorias_skills_categoria"]);
             if (!$isExist) {
@@ -140,11 +198,17 @@ class Portfolio extends DBAbstractModel
             }
 
             $skillModel = Skills::getInstancia();
-            $skillModel->edit($registros["id"], $registros["habilidades"], $registros["categorias_skills_categoria"]);
+            $skillModel->setId($registros["id"]);
+            $skillModel->setHabilidades($registros["habilidades"]);
+            $skillModel->setCategoriasSkillsCategoria($registros["categorias_skills_categoria"]);
+            $skillModel->edit();
         }
-        foreach ($portfolio["redes_sociales"] as $registros) {
+        foreach ($this->portfolio["redes_sociales"] as $registros) {
             $redesSocialesModel = RedesSociales::getInstancia();
-            $redesSocialesModel->edit($registros["id"], $registros["redes_socialescol"], $registros["url"]);
+            $redesSocialesModel->setId($registros["id"]);
+            $redesSocialesModel->setRedesSocialescol($registros["redes_socialescol"]);
+            $redesSocialesModel->setUrl($registros["url"]);
+            $redesSocialesModel->edit();
         }
             
     }

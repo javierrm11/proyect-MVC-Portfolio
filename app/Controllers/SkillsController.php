@@ -9,6 +9,7 @@ require_once __DIR__ . '/../Models/Skills.php';
 
 class SkillsController extends BaseController
 {
+    // Método para añadir un skill
     public function addSkillAction()
     {
         //obtener url
@@ -51,6 +52,7 @@ class SkillsController extends BaseController
         }
         $this->renderHTML('../app/views/view_addSkill.php', $data);
     }
+    // Método para editar un skill
     public function deleteSkillAction(){
         //obtener url
         $url = $_SERVER["REQUEST_URI"];
@@ -69,6 +71,7 @@ class SkillsController extends BaseController
         $trabajoObj->delete($id);
         header("Location: /user");
     }
+    // Método para mostrar un skill
     public function mostrarSkillAction()
     {
         $skillsModel = Skills::getInstancia();
@@ -87,6 +90,7 @@ class SkillsController extends BaseController
         $_SESSION['mensaje'] = "Skill mostrado con éxito.";
         header('Location: ../editar');
     }
+    // Método para ocultar un skill
     public function ocultarSkillAction()
     {
         $skillsModel = Skills::getInstancia();

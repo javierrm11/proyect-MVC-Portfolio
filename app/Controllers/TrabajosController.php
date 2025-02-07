@@ -9,6 +9,7 @@ require_once __DIR__ . '/../Models/Trabajos.php';
 
 class TrabajosControllers extends BaseController
 {
+    // metodo para agregar un trabajo
     public function addTrabajoAction()
     {
         //obtener url
@@ -57,6 +58,7 @@ class TrabajosControllers extends BaseController
         }
         $this->renderHTML('../app/views/view_addTrabajo.php', $data);
     }
+    // metodo para eliminar un trabajo
     public function deleteTrabajoAction(){
         //obtener url
         $url = $_SERVER["REQUEST_URI"];
@@ -75,7 +77,7 @@ class TrabajosControllers extends BaseController
         $trabajoObj->delete($id);
         header("Location: /user");
     }
-    
+    // metodo para mostrar un trabajo
     public function mostrarTrabajoAction()
     {
         $trabajoModel = Trabajos::getInstancia();
@@ -95,7 +97,7 @@ class TrabajosControllers extends BaseController
         $_SESSION['mensaje'] = "Trabajo mostrado con éxito.";
         header('Location: ../editar');
     }
-
+    // metodo para ocultar un trabajo
     public function ocultarTrabajoAction()
     {
         $trabajoModel = Trabajos::getInstancia();

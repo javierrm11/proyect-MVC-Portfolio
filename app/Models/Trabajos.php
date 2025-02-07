@@ -145,17 +145,24 @@ class Trabajos extends DBAbstractModel
         $this->get_results_from_query();
         return $this->rows;
     }
+    // funcion para obtener los trabajos visibles de un usuario
+    public function getTrabajosVisibles($id){
+        $this->query = "SELECT * FROM trabajos WHERE usuarios_id = :id and visible = 1";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+        return $this->rows;
+    }
     // funcion para obtener un trabajo en especifico
-    public function edit($trabajoId = "", $titulo = "", $descripcion = "", $fecha_inicio = "", $fecha_fin = "", $logros = ''){
+    public function edit(){
         $fecha = new \DateTime();
         $this->query = "UPDATE trabajos SET titulo = :titulo, descripcion = :descripcion, fecha_inicio = :fecha_inicio, fecha_final = :fecha_final, logros = :logros, updated_at = :updated_at WHERE id = :id";
-        $this->parametros['titulo'] = $titulo;
-        $this->parametros['descripcion'] = $descripcion;
-        $this->parametros['fecha_inicio'] = $fecha_inicio;
-        $this->parametros['fecha_final'] = $fecha_fin;
-        $this->parametros['logros'] = $logros;
+        $this->parametros['titulo'] = $this->titulo;
+        $this->parametros['descripcion'] = $this->descripcion;
+        $this->parametros['fecha_inicio'] = $this->fecha_inicio;
+        $this->parametros['fecha_final'] = $this->fecha_final;
+        $this->parametros['logros'] = $this->logros;
         $this->parametros['updated_at'] = date( 'Y-m-d H:i:s', $fecha->getTimestamp());
-        $this->parametros['id'] = $trabajoId;
+        $this->parametros['id'] = $this->id;
         $this->get_results_from_query();
         $this->mensaje = "Trabajo actualizado";
     }
@@ -166,13 +173,14 @@ class Trabajos extends DBAbstractModel
         $this->get_results_from_query();
         $this->mensaje = "Trabajo eliminado";
     }
+    // funcion para mostrar un trabajo
     public function mostrarTrabajo($id)
     {
         $this->query = "UPDATE trabajos SET visible = 1 WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
     }
-
+    // funcion para ocultar un trabajo
     public function ocultarTrabajo($id)
     {
         $this->query = "UPDATE trabajos SET visible = 0 WHERE id = :id";

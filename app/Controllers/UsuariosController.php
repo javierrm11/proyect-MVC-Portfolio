@@ -239,6 +239,7 @@ class UsuariosController extends BaseController
             header('Location: ./');
         }
     }
+    // Función para ocultar el perfil del usuario
     public function ocultarUsuarioAction(){
         if(!isset($_SESSION['usuario'])){
             header('Location: ./');
@@ -249,6 +250,7 @@ class UsuariosController extends BaseController
         $_SESSION['usuario']['visible'] = 0;
         header('Location: ./user');
     }
+    // Función para mostrar el perfil del usuario
     public function mostrarUsuarioAction(){
         if(!isset($_SESSION['usuario'])){
             header('Location: ./');
@@ -259,11 +261,13 @@ class UsuariosController extends BaseController
         $_SESSION['usuario']['visible'] = 1;
         header('Location: ./user');
     }
+    // Función para cerrar la sesión
     public function LogoutAction()
     {
         session_destroy();
         header('Location: ./');
     }
+    // Función para borrar el usuario
     public function BorrarUsuarioAction()
     {
         if (!isset($_SESSION['usuario'])) {

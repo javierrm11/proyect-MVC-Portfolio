@@ -94,7 +94,7 @@ class Proyectos extends DBAbstractModel
         $this->usuarios_id = $usuarios_id;
     }
 
-
+    // funcion para añaadir un proyecto
     public function set(){
         $fecha = new \DateTime();
 
@@ -109,39 +109,58 @@ class Proyectos extends DBAbstractModel
         $this->get_results_from_query();
         $this->mensaje = "Proyecto agregado";
     }
+    // funcion para obtener un proyecto
     public function get($id = ''){
         $this->query = "SELECT usuarios_id FROM proyectos WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows[0]['usuarios_id'];
     }
+    // funcion para obtener todos los proyectos
     public function getProyectos($id){
         $this->query = "SELECT * FROM proyectos WHERE usuarios_id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         return $this->rows;
     }
+    // funcion para obtener los proyectos visibles
+    public function getProyectosVisibles($id){
+        $this->query = "SELECT * FROM proyectos WHERE usuarios_id = :id and visible = 1";
+        $this->parametros['id'] = $id;
+        $this->get_results_from_query();
+        return $this->rows;
+    }
+    // funcion para editar un proyecto
+    public function edit(){
+        $fecha = new \DateTime();
+        $this->query = "UPDATE proyectos SET titulo = :titulo, descripcion = :descripcion, tecnologias = :tecnologias, updated_at = :updated_at WHERE id = :id";
+        $this->parametros['titulo'] = $this->titulo;
+        $this->parametros['descripcion'] = $this->descripcion;
+        $this->parametros['tecnologias'] = $this->tecnologias;
+        $this->parametros['updated_at'] = date( 'Y-m-d H:i:s', $fecha->getTimestamp());
+        $this->parametros['id'] = $this->id;
+        $this->get_results_from_query();
+        $this->mensaje = "Proyecto actualizado";
+    }
+    // funcion para eliminar un proyecto
     public function delete($id = ""){
         $this->query = "DELETE FROM proyectos WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
         $this->mensaje = "Proyecto eliminado";
     }
-    
+    // funcion para mostrar un proyecto
     public function mostrarProyecto($id)
     {
         $this->query = "UPDATE proyectos SET visible = 1 WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();
     }
-
+    // funcion para ocultar un proyecto
     public function ocultarProyecto($id)
     {
         $this->query = "UPDATE proyectos SET visible = 0 WHERE id = :id";
         $this->parametros['id'] = $id;
         $this->get_results_from_query();  
-    }
-    public function edit(){
-
     }
 }
