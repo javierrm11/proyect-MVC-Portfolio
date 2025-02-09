@@ -16,7 +16,7 @@ class RedesSocialesController extends BaseController
         $url = $_SERVER["REQUEST_URI"];
         $url = explode("/", $url);
         $id = $url[2];
-        //validar si el usuario esta logeado
+        //validar si el usuario es el mismo que esta logeado
         if ($_SESSION["usuario"]["id"] != $id) {
             header("Location: /");
             exit();
@@ -42,7 +42,7 @@ class RedesSocialesController extends BaseController
                 $redSocialModel->setUpdated_at(date('Y-m-d H:i:s'));
                 $redSocialModel->setUsuarios_id($_SESSION['usuario']['id']);
                 $redSocialModel->set();
-                header('Location: /user');
+                header('Location: /editar');
                 exit();
             }
         }
@@ -61,8 +61,6 @@ class RedesSocialesController extends BaseController
             header("Location: /");
             exit();
         }
-        $uri = $_SERVER['REQUEST_URI'];
-        $id = explode('/', $uri)[2];
         $redSocialModel = RedesSociales::getInstancia();
         $redSocialModel->setId($id);
         $redSocialModel->delete();

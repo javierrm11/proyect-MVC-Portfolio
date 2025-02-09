@@ -57,7 +57,8 @@ $router->add([
 $router->add([
     'name' => 'logout',
     'path' => '/^\/logout$/',
-    'action' => [UsuariosController::class, 'LogoutAction']
+    'action' => [UsuariosController::class, 'LogoutAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'activar',
@@ -72,23 +73,27 @@ $router->add([
 $router->add([
     'name' => 'ocultarUsuario',
     'path' => '/^\/ocultarUsuario$/',
-    'action' => [UsuariosController::class, 'ocultarUsuarioAction']
+    'action' => [UsuariosController::class, 'ocultarUsuarioAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'mostrarUsuario',
     'path' => '/^\/mostrarUsuario$/',
-    'action' => [UsuariosController::class, 'mostrarUsuarioAction']
+    'action' => [UsuariosController::class, 'mostrarUsuarioAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'borrarUsuario',
     'path' => '/^\/borrarUsuario$/',
-    'action' => [UsuariosController::class, 'borrarUsuarioAction']
+    'action' => [UsuariosController::class, 'borrarUsuarioAction'],
+    'perfil' => ['usuario']
 ]);
 // rutas de portfolio
 $router->add([
     'name' => 'user',
     'path' => '/^\/user$/',
-    'action' => [PortfolioController::class, 'indexAction']
+    'action' => [PortfolioController::class, 'indexAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'portfolio',
@@ -98,92 +103,109 @@ $router->add([
 $router->add([
     'name' => 'crearPortfolio',
     'path' => '/^\/crearPortfolio$/',
-    'action' => [PortfolioController::class, 'createAction']
+    'action' => [PortfolioController::class, 'createAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'borrarPortfolio',
     'path' => '/^\/borrar$/',
-    'action' => [PortfolioController::class, 'borrarAction']
+    'action' => [PortfolioController::class, 'borrarAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'editarPortfolio',
     'path' => '/^\/editar$/',
-    'action' => [PortfolioController::class, 'editAction']
+    'action' => [PortfolioController::class, 'editAction'],
+    'perfil' => ['usuario']
 ]);
 // rutas de trabajos
 $router->add([
     'name' => 'addTrabajo',
     'path' => '/^\/addTrabajo\/(\d+)$/',
-    'action' => [TrabajosControllers::class, 'addTrabajoAction']
+    'action' => [TrabajosControllers::class, 'addTrabajoAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'eliminarTrabajo',
     'path' => '/^\/eliminarTrabajo\/(\d+)$/',
-    'action' => [TrabajosControllers::class, 'deleteTrabajoAction']
+    'action' => [TrabajosControllers::class, 'deleteTrabajoAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'mostrarTrabajo',
     'path' => '/^\/mostrarTrabajo\/(\d+)$/',
-    'action' => [TrabajosControllers::class, 'mostrarTrabajoAction']
+    'action' => [TrabajosControllers::class, 'mostrarTrabajoAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'ocultarTrabajo',
     'path' => '/^\/ocultarTrabajo\/(\d+)$/',
-    'action' => [TrabajosControllers::class, 'ocultarTrabajoAction']
+    'action' => [TrabajosControllers::class, 'ocultarTrabajoAction'],
+    'perfil' => ['usuario']
 ]);
 // rutas de proyectos
 $router->add([
     'name' => 'addProyecto',
     'path' => '/^\/addProyecto\/(\d+)$/',
-    'action' => [ProyectosControllers::class, 'addProyectoAction']
+    'action' => [ProyectosControllers::class, 'addProyectoAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'eliminarProyecto',
     'path' => '/^\/eliminarProyecto\/(\d+)$/',
-    'action' => [ProyectosControllers::class, 'deleteProyectoAction']
+    'action' => [ProyectosControllers::class, 'deleteProyectoAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'mostrarProyecto',
     'path' => '/^\/mostrarProyecto\/(\d+)$/',
-    'action' => [ProyectosControllers::class, 'mostrarProyectoAction']
+    'action' => [ProyectosControllers::class, 'mostrarProyectoAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'ocultarProyecto',
     'path' => '/^\/ocultarProyecto\/(\d+)$/',
-    'action' => [ProyectosControllers::class, 'ocultarProyectoAction']
+    'action' => [ProyectosControllers::class, 'ocultarProyectoAction'],
+    'perfil' => ['usuario']
 ]);
 // rutas de skills
 $router->add([
     'name' => 'addSkill',
     'path' => '/^\/addSkill\/(\d+)$/',
-    'action' => [SkillsController::class, 'addSkillAction']
+    'action' => [SkillsController::class, 'addSkillAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'eliminarSkill',
     'path' => '/^\/eliminarSkill\/(\d+)$/',
-    'action' => [SkillsController::class, 'deleteSkillAction']
+    'action' => [SkillsController::class, 'deleteSkillAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'mostrarSkill',
     'path' => '/^\/mostrarSkill\/(\d+)$/',
-    'action' => [SkillsController::class, 'mostrarSkillAction']
+    'action' => [SkillsController::class, 'mostrarSkillAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'ocultarSkill',
     'path' => '/^\/ocultarSkill\/(\d+)$/',
-    'action' => [SkillsController::class, 'ocultarSkillAction']
+    'action' => [SkillsController::class, 'ocultarSkillAction'],
+    'perfil' => ['usuario']
 ]);
 
 // rutas de redes sociales
 $router->add([
     'name' => 'addRedSocial',
     'path' => '/^\/addRedSocial\/(\d+)$/',
-    'action' => [RedesSocialesController::class, 'addRedSocialAction']
+    'action' => [RedesSocialesController::class, 'addRedSocialAction'],
+    'perfil' => ['usuario']
 ]);
 $router->add([
     'name' => 'eliminarRedSocial',
     'path' => '/^\/eliminarRedSocial\/(\d+)$/',
-    'action' => [RedesSocialesController::class, 'eliminarRedSocialAction']
+    'action' => [RedesSocialesController::class, 'eliminarRedSocialAction'],
+    'perfil' => ['usuario']
 ]);
 
 
@@ -193,6 +215,13 @@ $route = $router->match($request); // Comprobamos que coincide una ruta
 
 // Si coincide una ruta, creamos una instancia del controlador y llamamos al método
 if ($route) {
+    if(isset($route['perfil'])) {
+        if(!isset($_SESSION['usuario']) || $route['perfil'] == 'usuario') {
+            $_SESSION['error'] = 'No tienes permisos para acceder a esta página.';
+            header('Location: /');
+            exit;
+        }
+    }
     $controllerName = $route['action'][0];
     $actionName = $route['action'][1];
     $controller = new $controllerName;

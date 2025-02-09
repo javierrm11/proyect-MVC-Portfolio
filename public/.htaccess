@@ -1,7 +1,7 @@
 RewriteEngine On
 
 # No redirigir las solicitudes a carpetas de recursos estáticos (CSS, JS, imágenes, etc.)
-RewriteCond %{REQUEST_URI} ^/(styles|css|script|imagenes) [NC]
+RewriteCond %{REQUEST_URI} ^/(styles|css|script|imagenes|js) [NC]
 RewriteRule .* - [L]
 
 # Redirige todo lo demás a index.php

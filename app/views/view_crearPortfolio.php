@@ -1,6 +1,4 @@
-<?php
-$data['portfolioExists'] = false;
-?>
+
 <!DOCTYPE html>
 <html lang="en">
 

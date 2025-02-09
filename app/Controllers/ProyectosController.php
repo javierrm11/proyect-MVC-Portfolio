@@ -15,7 +15,7 @@ class ProyectosControllers extends BaseController
         $url = $_SERVER["REQUEST_URI"];
         $url = explode("/", $url);
         $id = $url[2];
-        //validar si el usuario esta logeado
+        //validar si el usuario es el propietario del proyecto
         if ($_SESSION["usuario"]["id"] != $id) {
             header("Location: /");
             exit();
@@ -49,6 +49,7 @@ class ProyectosControllers extends BaseController
                 $proyectoObj->setUpdatedAt($updated_at);
                 $proyectoObj->setUsuariosId($usuarios_id);
                 $proyectoObj->set();
+                header('Location: /editar');
             }
         }
         $this->renderHTML('../app/views/view_addProyecto.php', $data);
@@ -59,7 +60,7 @@ class ProyectosControllers extends BaseController
         $url = $_SERVER["REQUEST_URI"];
         $url = explode("/", $url);
         $id = $url[2];
-        //validar si el usuario esta logeado
+        //validar si el usuario es el propietario del proyecto
         $idUser = Proyectos::getInstancia()->get($id);
         if ($_SESSION["usuario"]["id"] != $idUser) {
             header("Location: /");
@@ -81,7 +82,7 @@ class ProyectosControllers extends BaseController
         $id = explode('/', $uri)[2];
         $idUser = $proyectosModel->get($id);
         // comprobamos si el usuario es el propietario del proyecto
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+        if ($idUser != $_SESSION['usuario']['id']) {
             header('Location: ../');
             exit();
         }
@@ -100,7 +101,7 @@ class ProyectosControllers extends BaseController
         $id = explode('/', $uri)[2];
         $idUser = $proyectosModel->get($id);
         // comprobamos si el usuario es el propietario del proyecto
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+        if ($idUser != $_SESSION['usuario']['id']) {
             header('Location: ../');
             exit();
         }

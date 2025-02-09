@@ -16,7 +16,7 @@ class TrabajosControllers extends BaseController
         $url = $_SERVER["REQUEST_URI"];
         $url = explode("/", $url);
         $id = $url[2];
-        //validar si el usuario esta logeado
+        //validar si el usuario es el propietario del trabajo
         if ($_SESSION["usuario"]["id"] != $id ) {
             header("Location: /");
             exit();
@@ -26,7 +26,7 @@ class TrabajosControllers extends BaseController
         //obtener los datos del formulario
         $titulo = $descripcion = $fecha_inicio = $fecha_fin = $logros = "";
         $data = ['error' => ''];
-
+        // Validar si se envio el formulario
         if (isset($_POST["anadirTrabajo"])) {
             $titulo = $_POST["tituloTrabajos"];
             $descripcion = $_POST["descripcionTrabajos"];
@@ -54,25 +54,27 @@ class TrabajosControllers extends BaseController
                 $trabajoObj->setUpdatedAt($updated_at);
                 $trabajoObj->setUsuariosId($usuarios_id);
                 $trabajoObj->set();
+                header('Location: /editar');
             }
         }
         $this->renderHTML('../app/views/view_addTrabajo.php', $data);
     }
     // metodo para eliminar un trabajo
     public function deleteTrabajoAction(){
+
         //obtener url
         $url = $_SERVER["REQUEST_URI"];
         $url = explode("/", $url);
         $id = $url[2];
+
         //validar si el usuario esta logeado
         $idUser = Trabajos::getInstancia()->get($id);
         if ($_SESSION["usuario"]["id"] != $idUser) {
             header("Location: /");
             exit();
         }
-        $url = $_SERVER["REQUEST_URI"];
-        $url = explode("/", $url);
-        $id = $url[2];
+
+        // eliminar trabajo
         $trabajoObj = Trabajos::getInstancia();
         $trabajoObj->delete($id);
         header("Location: /user");
@@ -86,7 +88,7 @@ class TrabajosControllers extends BaseController
         $id = explode('/', $uri)[2];
         $idUser = $trabajoModel->get($id);
         // comprobamos si el usuario es el propietario del trabajo
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+        if ($idUser != $_SESSION['usuario']['id']) {
             var_dump($idUser);
             var_dump($_SESSION['usuario']['id']);
             exit();
@@ -106,7 +108,7 @@ class TrabajosControllers extends BaseController
         $id = explode('/', $uri)[2];
         $idUser = $trabajoModel->get($id);
         // comprobamos si el usuario es el propietario del trabajo
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+        if ($idUser != $_SESSION['usuario']['id']) {
             header('Location: ../');
             exit();
         }

@@ -19,19 +19,17 @@ class PortfolioController extends BaseController
     // Ver portfolio de usuario
     public function indexAction()
     {
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: ./login');
-            exit();
-        }
-
+        // obtenemos el id del usuario
         $usuarioId = $_SESSION['usuario']['id'];
         $portfolioModel = Portfolio::getInstancia();
-
+        // obtenemos los datos del portfolio
         $portfolio = $portfolioModel->get($usuarioId);
+        // comprobamos si el portfolio existe
         $portfolioExist = true;
         if($portfolio['proyectos'] == null && $portfolio['trabajos'] == null && $portfolio['skills'] == null && $portfolio['redes_sociales'] == null){
             $portfolioExist = false;
         }
+        // datos a pasar a la vista
         $data = [
             'portfolioExists' => $portfolioExist,
             'trabajos' => $portfolio['trabajos'],
@@ -39,30 +37,29 @@ class PortfolioController extends BaseController
             'skills' => $portfolio['skills'],
             'redesSociales' => $portfolio['redes_sociales']
         ];
-
         $this->renderHTML('../app/views/view_user.php', $data);
     }
+
     // Ver portfolio de usuario
     public function getPortfolioUserAction(){
+        // obtenemos el id del usuario del portfolio
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
+        // obtenemos los datos del portfolio
         $portfolioModel = Portfolio::getInstancia();
         $data = $portfolioModel->get($id);
         $data["usuario"] = Usuario::getInstancia()->getUser($id);
+        // comprobamos si el portfolio existe
         $data['portfolioExists'] = true;
         if($data['proyectos'] == null && $data['trabajos'] == null && $data['skills'] == null && $data['redes_sociales'] == null){
             $data['portfolioExists'] = false;
         }
         $this->renderHTML('../app/views/view_portfolio.php', $data);
     }
+
     // Crear portfolio
     public function createAction()
     {
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: ./login');
-            exit();
-        }
-
         $usuarioId = $_SESSION['usuario']['id'];
         // Datos del formulario
         $data = [
@@ -96,7 +93,8 @@ class PortfolioController extends BaseController
             'eLinkedin' => '',
             'eGithub' => '',
             'eInstagram' => '',
-            'error' => false
+            'error' => false,
+            'portfolioExists' => Usuario::getInstancia()->getPortfolio()
         ];
 
         if (isset($_POST["guardar"])) {
@@ -223,10 +221,6 @@ class PortfolioController extends BaseController
     // Editar portfolio
     public function editAction()
     {
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: ./login');
-            exit();
-        }
         // Obtenemos el usuario
         $usuarioId = $_SESSION['usuario']['id'];
         $error = "";
@@ -322,7 +316,6 @@ class PortfolioController extends BaseController
                 $_SESSION['mensaje'] = "Portfolio actualizado con éxito.";
             }
         }
-
         $data = [
             'trabajos' => $trabajosModel,
             'proyectos' => $proyectosModel,
@@ -338,11 +331,7 @@ class PortfolioController extends BaseController
     {
         $portfolioModel = Portfolio::getInstancia();
         
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: ../');
-            exit();
-        }
-
+        // obtenemos el id del usuario del portfolio y borramos el portfolio
         $usuarioId = $_SESSION['usuario']['id'];
         $portfolioModel->delete($usuarioId);
 
@@ -350,8 +339,5 @@ class PortfolioController extends BaseController
         header("Location: ./user");
         exit();
     }
-    
-    // Skills
-    
 
 }

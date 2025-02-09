@@ -16,7 +16,7 @@ class SkillsController extends BaseController
         $url = $_SERVER["REQUEST_URI"];
         $url = explode("/", $url);
         $id = $url[2];
-        //validar si el usuario esta logeado
+        //validar si el usuario es el propietario de la skill
         if ($_SESSION["usuario"]["id"] != $id) {
             header("Location: /");
             exit();
@@ -48,6 +48,7 @@ class SkillsController extends BaseController
                 $proyectoObj->setUpdatedAt($updated_at);
                 $proyectoObj->setUsuariosId($usuarios_id);
                 $proyectoObj->set();
+                header('Location: /editar');
             }
         }
         $this->renderHTML('../app/views/view_addSkill.php', $data);
@@ -58,15 +59,12 @@ class SkillsController extends BaseController
         $url = $_SERVER["REQUEST_URI"];
         $url = explode("/", $url);
         $id = $url[2];
-        //validar si el usuario esta logeado
+        //validar si el usuario es el propietario de la skill
         $idUser = Skills::getInstancia()->get($id);
         if ($_SESSION["usuario"]["id"] != $idUser) {
             header("Location: /");
             exit();
         }
-        $url = $_SERVER["REQUEST_URI"];
-        $url = explode("/", $url);
-        $id = $url[2];
         $trabajoObj = Skills::getInstancia();
         $trabajoObj->delete($id);
         header("Location: /user");
@@ -79,12 +77,11 @@ class SkillsController extends BaseController
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
         $idUser = $skillsModel->get($id);
-        // comprobamos si el usuario es el propietario del proyecto
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+        // comprobamos si el usuario es el propietario de la skill
+        if ($idUser != $_SESSION['usuario']['id']) {
             header('Location: ../');
             exit();
         }
-
         $skillsModel->mostrarSkill($id); // mostramos el skill
         // redirigimos a la vista de editar
         $_SESSION['mensaje'] = "Skill mostrado con éxito.";
@@ -98,8 +95,8 @@ class SkillsController extends BaseController
         $uri = $_SERVER['REQUEST_URI'];
         $id = explode('/', $uri)[2];
         $idUser = $skillsModel->get($id);
-        // comprobamos si el usuario es el propietario del proyecto
-        if (!isset($_SESSION['usuario']) || $idUser != $_SESSION['usuario']['id']) {
+        // comprobamos si el usuario es el propietario de la skill
+        if ($idUser != $_SESSION['usuario']['id']) {
             header('Location: ../');
             exit();
         }

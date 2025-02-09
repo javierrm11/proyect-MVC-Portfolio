@@ -24,6 +24,12 @@ class UsuariosController extends BaseController
         // Almacenamos los datos en $data
         $data['usuarios'] = $usuario->getAllVisible();
 
+        // Recuperar el mensaje de error de la sesión
+        if (isset($_SESSION['error'])) {
+            $data['error'] = $_SESSION['error'];
+            unset($_SESSION['error']); // Eliminar el mensaje de error de la sesión
+        }
+
         // Llamamos a la función renderHTML
         $this->renderHTML('../app/views/index_view.php', $data);
     }
@@ -32,6 +38,7 @@ class UsuariosController extends BaseController
     {  
         // Si hay sesión iniciada, redirigir a inicio
         if(isset($_SESSION['usuario'])){
+            $_SESSION['error'] = 'Ya has iniciado sesión';
             header('Location: ./');
         }
         // Variables para los campos del formulario
@@ -132,7 +139,7 @@ class UsuariosController extends BaseController
 
                 // Guardar usuario
                 $usuario->set();
-                $data['portfolioExists'] = false;
+                $usuario->setPortfolio(false);
 
                 // Enviar correo de activación
                 $mailer = new MailerController();
@@ -152,6 +159,7 @@ class UsuariosController extends BaseController
     {
         // Si hay sesión iniciada, redirigir a inicio
         if(isset($_SESSION['usuario'])){
+            $_SESSION['error'] = 'Ya has iniciado sesión';
             header('Location: ./');
         }
         $email = $password = '';
@@ -241,9 +249,6 @@ class UsuariosController extends BaseController
     }
     // Función para ocultar el perfil del usuario
     public function ocultarUsuarioAction(){
-        if(!isset($_SESSION['usuario'])){
-            header('Location: ./');
-        }
         $usuario = Usuario::getInstancia();
         $usuario->setId($_SESSION['usuario']['id']);
         $usuario->ocultarUsuario();
@@ -252,9 +257,6 @@ class UsuariosController extends BaseController
     }
     // Función para mostrar el perfil del usuario
     public function mostrarUsuarioAction(){
-        if(!isset($_SESSION['usuario'])){
-            header('Location: ./');
-        }
         $usuario = Usuario::getInstancia();
         $usuario->setId($_SESSION['usuario']['id']);
         $usuario->mostrarUsuario();
@@ -270,15 +272,14 @@ class UsuariosController extends BaseController
     // Función para borrar el usuario
     public function BorrarUsuarioAction()
     {
-        if (!isset($_SESSION['usuario'])) {
-            header('Location: ./');
-        }
+        // si tiene portfolio, borrarlos
         if($portfolios = Portfolio::getInstancia()->get($_SESSION['usuario']['id'])){
             foreach ($portfolios as $portfolio) {
                 $portfolio = Portfolio::getInstancia();
                 $portfolio->delete($_SESSION['usuario']['id']);
             }
         }
+        // borrar usuario
         $usuario = Usuario::getInstancia();
         $usuario->setId($_SESSION['usuario']['id']);
         $usuario->delete();

@@ -31,6 +31,7 @@ class Usuario extends DBAbstractModel{
     private $token;
     private $fecha_creacion_token;
     private $cuenta_activa;
+    private $portfolio;
 
     //getters y setters
     public function getId()
@@ -89,6 +90,10 @@ class Usuario extends DBAbstractModel{
     {
         return $this->cuenta_activa;
     }
+    public function getPortfolio()
+    {
+        return $this->portfolio;
+    }
     public function setId($id) {
         $this->id = $id;
     }
@@ -131,6 +136,9 @@ class Usuario extends DBAbstractModel{
     }
     public function setCuentaActiva($cuenta_activa) {
         $this->cuenta_activa = $cuenta_activa;
+    }
+    public function setPortfolio($portfolio) {
+        $this->portfolio = $portfolio;
     }
 
     //mensaje
@@ -220,22 +228,12 @@ class Usuario extends DBAbstractModel{
             LEFT JOIN trabajos t ON u.id = t.usuarios_id
             LEFT JOIN skills s ON u.id = s.usuarios_id
             WHERE LOWER(u.nombre) LIKE LOWER(:buscar) AND u.cuenta_activa = 1 AND u.visible = 1
-            OR LOWER(p.titulo) LIKE LOWER(:buscar) AND u.cuenta_activa = 1 AND u.visible = 1
-            OR LOWER(t.titulo) LIKE LOWER(:buscar) AND u.cuenta_activa = 1 AND u.visible = 1
             OR LOWER(s.habilidades) LIKE LOWER(:buscar) AND u.cuenta_activa = 1 AND u.visible = 1
         ";
         $this->parametros['buscar'] = '%' . $buscar . '%';
         $this->get_results_from_query();
         
-        // Borra duplicados
-        $uniqueUsers = [];
-        foreach ($this->rows as $row) {
-            if (!isset($uniqueUsers[$row['id']])) {
-                $uniqueUsers[$row['id']] = $row;
-            }
-        }
-        
-        return array_values($uniqueUsers);
+        return $this->rows;
     }
     
     // funcion para borrar un usuario
