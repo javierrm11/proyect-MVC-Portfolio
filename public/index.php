@@ -67,7 +67,7 @@ $router->add([
 ]);
 $router->add([
     'name' => 'buscar',
-    'path' => '/^\/buscar$/',
+    'path' => '/^\/buscar(\?q=.*)?$/',
     'action' => [UsuariosController::class, 'buscarAction']
 ]);
 $router->add([

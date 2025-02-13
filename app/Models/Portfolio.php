@@ -216,23 +216,15 @@ class Portfolio extends DBAbstractModel
     public function delete($usuarioId = null)
     {
         // Borrar proyectos
-        $this->query = "DELETE FROM proyectos WHERE usuarios_id = :usuarios_id";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
+        Proyectos::getInstancia()->deleteAll($usuarioId);
 
         // Borrar trabajos
-        $this->query = "DELETE FROM trabajos WHERE usuarios_id = :usuarios_id";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
+        Trabajos::getInstancia()->deleteAll($usuarioId);
 
         // Borrar skills
-        $this->query = "DELETE FROM skills WHERE usuarios_id = :usuarios_id";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
+        Skills::getInstancia()->deleteAll($usuarioId);
 
         // Borrar redes sociales
-        $this->query = "DELETE FROM redes_sociales WHERE usuarios_id = :usuarios_id";
-        $this->parametros['usuarios_id'] = $usuarioId;
-        $this->get_results_from_query();
+        RedesSociales::getInstancia()->deleteAll($usuarioId);
     }
 }

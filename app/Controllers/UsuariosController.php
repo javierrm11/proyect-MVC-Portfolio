@@ -237,16 +237,21 @@ class UsuariosController extends BaseController
         }
     }
     public function buscarAction()
-    {
-        if(isset($_POST['buscar'])){
-            $buscar =  $_POST['buscar'] ?? "";
-            $usuario = Usuario::getInstancia();
-            $resultados = $usuario->buscar(strtolower($buscar));
-            $this->renderHTML('../app/views/index_view.php', ['usuarios' => $resultados, 'buscar' => $buscar]);
-        } else {
-            header('Location: ./');
-        }
+{
+    if (isset($_POST['buscar'])) {
+        $buscar = $_POST['buscar'] ?? "";
+        $buscar = strtolower($buscar);
+        header('Location: /buscar?q=' . urlencode($buscar));
+        exit();
+    } elseif (isset($_GET['q'])) {
+        $buscar = $_GET['q'] ?? "";
+        $usuario = Usuario::getInstancia();
+        $resultados = $usuario->buscar(strtolower($buscar));
+        $this->renderHTML('../app/views/index_view.php', ['usuarios' => $resultados, 'buscar' => $buscar]);
+    } else {
+        header('Location: ./');
     }
+}
     // Función para ocultar el perfil del usuario
     public function ocultarUsuarioAction(){
         $usuario = Usuario::getInstancia();

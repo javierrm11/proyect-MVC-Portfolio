@@ -110,4 +110,9 @@ class RedesSociales extends DBAbstractModel
         $this->parametros['id'] = $this->id;
         $this->get_results_from_query();
     }
+    public function deleteAll($usuarioId){
+        $this->query = "DELETE FROM redes_sociales WHERE usuarios_id = :usuarios_id";
+        $this->parametros['usuarios_id'] = $usuarioId;
+        $this->get_results_from_query();
+    }
 }

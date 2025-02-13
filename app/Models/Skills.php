@@ -143,6 +143,12 @@ class Skills extends DBAbstractModel
         $this->get_results_from_query();
         $this->mensaje = "Skill eliminado";
     }
+    public function deleteAll($usuarioId){
+        $this->query = "DELETE FROM skills WHERE usuarios_id = :usuarios_id";
+        $this->parametros['usuarios_id'] = $usuarioId;
+        $this->get_results_from_query();
+        $this->mensaje = "Skills eliminados";
+    }
     // funcion para mostrar skill
     public function mostrarSkill($id)
     {

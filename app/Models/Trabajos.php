@@ -173,6 +173,12 @@ class Trabajos extends DBAbstractModel
         $this->get_results_from_query();
         $this->mensaje = "Trabajo eliminado";
     }
+    public function deleteAll($usuarioId){
+        $this->query = "DELETE FROM trabajos WHERE usuarios_id = :usuarios_id";
+        $this->parametros['usuarios_id'] = $usuarioId;
+        $this->get_results_from_query();
+        $this->mensaje = "Trabajos eliminados";
+    }
     // funcion para mostrar un trabajo
     public function mostrarTrabajo($id)
     {

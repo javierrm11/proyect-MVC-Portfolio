@@ -178,7 +178,7 @@ class PortfolioController extends BaseController
             }
 
             if (!$data['error']) {
-                // Guardamos los datos en la base de datos
+                // Guardamos los datos en las propiedades del modelo
                 $data['usuarioId'] = $usuarioId;
                 $portfolioModel = Portfolio::getInstancia();
                 $portfolioModel->setTrabajo([

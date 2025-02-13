@@ -149,6 +149,12 @@ class Proyectos extends DBAbstractModel
         $this->get_results_from_query();
         $this->mensaje = "Proyecto eliminado";
     }
+    public function deleteAll($usuarioId){
+        $this->query = "DELETE FROM proyectos WHERE usuarios_id = :usuarios_id";
+        $this->parametros['usuarios_id'] = $usuarioId;
+        $this->get_results_from_query();
+        $this->mensaje = "Proyectos eliminados";
+    }
     // funcion para mostrar un proyecto
     public function mostrarProyecto($id)
     {
